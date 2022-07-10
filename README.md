@@ -14,3 +14,5 @@
 - auto building
 - run tsc in build but also locally
 - comments
+- add or  remove tailwind scrollbar hide library
+- env variable public vs not
