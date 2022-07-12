@@ -1,34 +1,13 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { playlistIdState, playlistState } from "../atoms/playlistAtom";
-import sample from "lodash/sample";
-import useSpotify from "../hooks/useSpotifyApi";
 import Songs from "./Songs";
 import useBackgroundColor from "../hooks/useBackgroundColor";
+import { useSpotify } from "../hooks/useSpotify";
 
 const Center = () => {
-  const spotifyApi = useSpotify();
   const { data: session } = useSession();
-  const playlistId = useRecoilValue(playlistIdState);
-  const [playlist, setPlaylist] = useRecoilState(playlistState);
-  const color = useBackgroundColor(playlistId);
-
-  const accessToken = spotifyApi.getAccessToken();
-
-  useEffect(() => {
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi
-        .getPlaylist(playlistId)
-        .then((data) => {
-          setPlaylist(data.body);
-        })
-        .catch((error) =>
-          console.log("Something went wrong fetching playlist", error)
-        );
-    }
-  }, [accessToken, spotifyApi, playlistId]);
+  const { playlist, playlistId } = useSpotify();
+  const color = useBackgroundColor(playlistId ?? "");
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
