@@ -22,7 +22,9 @@ const Home: NextPage = () => {
 export default Home;
 
 export async function getServerSideProps() {
+  console.log("getServerSideProps: getSession before");
   const session = await getSession();
+  console.log("getServerSideProps: getSession after", session);
 
   return {
     props: {
