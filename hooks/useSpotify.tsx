@@ -26,6 +26,7 @@ type SpotifyContextType = {
   selectPlaylist: (id: string) => void;
   togglePlayPause: () => void;
   changeVolume: (volume: number) => void;
+  playSong: (track: SpotifyApi.PlaylistTrackObject) => void;
 };
 
 const context = createContext<SpotifyContextType>({
@@ -37,6 +38,7 @@ const context = createContext<SpotifyContextType>({
   selectPlaylist: () => {},
   togglePlayPause: () => {},
   changeVolume: () => {},
+  playSong: () => {},
 });
 
 export default context;
@@ -111,6 +113,23 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     });
   };
 
+  const playSong = (track: SpotifyApi.PlaylistTrackObject) => {
+    if (!track?.track?.id || !track?.track.uri) {
+      console.log(
+        "unable to play due to missing id",
+        track.track?.id,
+        track.track?.uri
+      );
+      return;
+    }
+
+    setCurrentTrackId(track.track.id);
+    setIsPlaying(true);
+    spotifyApi.play({
+      uris: [track.track?.uri],
+    });
+  };
+
   const changeVolume = (volume: number) => {
     setVolume(volume);
     debounceAdjustVolume(volume);
@@ -136,6 +155,7 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
         selectPlaylist,
         togglePlayPause,
         changeVolume,
+        playSong,
       }}
     >
       {children}

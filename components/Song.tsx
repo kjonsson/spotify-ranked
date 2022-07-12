@@ -1,6 +1,4 @@
-import { useRecoilState } from "recoil";
-import { currentTrackIdState, isPlayingState } from "../atoms/songAtom";
-import useSpotify from "../hooks/useSpotifyApi";
+import { useSpotify } from "../hooks/useSpotify";
 import { millisecondsToMinutesAndSeconds } from "../utils/time";
 
 const Song = ({
@@ -10,31 +8,11 @@ const Song = ({
   order: number;
   track: SpotifyApi.PlaylistTrackObject;
 }) => {
-  const spotifyApi = useSpotify();
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
-  const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
-
-  const playSong = () => {
-    if (!track?.track?.id || !track?.track.uri) {
-      console.log(
-        "unable to play due to missing id",
-        track.track?.id,
-        track.track?.uri
-      );
-      return;
-    }
-
-    setCurrentTrackId(track.track.id);
-    setIsPlaying(true);
-    spotifyApi.play({
-      uris: [track.track?.uri],
-    });
-  };
+  const { playSong } = useSpotify();
 
   return (
     <div
-      onClick={playSong}
+      onClick={() => playSong(track)}
       className="grid grid-cols-2 px-5 py-4 text-gray-500 rounded-lg hover:bg-gray-900"
     >
       <div className="flex items-center space-x-4">
