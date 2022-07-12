@@ -20,7 +20,7 @@ const Player = () => {
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
-  const [volume, setVolume] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(50);
 
   const songInfo = useSongInfo();
 
@@ -48,11 +48,10 @@ const Player = () => {
     });
   };
 
-  useEffect(() => {
-    if (0 <= volume && volume <= 100) {
-      debounceAdjustVolume(volume);
-    }
-  }, [volume]);
+  const handleChangeVolume = (volume: number) => {
+    setVolume(volume);
+    debounceAdjustVolume(volume);
+  };
 
   const debounceAdjustVolume = useCallback(
     debounce((volume) => {
@@ -66,7 +65,6 @@ const Player = () => {
   useEffect(() => {
     if (spotifyApi.getAccessToken() && !currentTrackId) {
       fetchCurrentSong();
-      setVolume(0);
     }
   }, [currentTrackId, spotifyApi, session]);
 
@@ -110,7 +108,7 @@ const Player = () => {
           value={volume}
           min={0}
           max={100}
-          onChange={(e) => setVolume(Number(e.target.value))}
+          onChange={(e) => handleChangeVolume(Number(e.target.value))}
         />
         <VolumeUpIcon
           onClick={() => volume < 100 && setVolume(volume + 10)}

@@ -30,15 +30,15 @@ const Center = () => {
   const accessToken = spotifyApi.getAccessToken();
 
   useEffect(() => {
-    console.log("should I", spotifyApi.getAccessToken());
     if (spotifyApi.getAccessToken()) {
       spotifyApi
         .getPlaylist(playlistId)
         .then((data) => {
-          console.log("got data", data);
           setPlaylist(data.body);
         })
-        .catch((error) => console.log("Something went wrong", error));
+        .catch((error) =>
+          console.log("Something went wrong fetching playlist", error)
+        );
     }
   }, [accessToken, spotifyApi, playlistId]);
 
