@@ -27,16 +27,20 @@ const Center = () => {
     setColor(sample(colors) || colors[0]);
   });
 
-  useEffect(() => {
-    spotifyApi
-      .getPlaylist(playlistId)
-      .then((data) => {
-        setPlaylist(data.body);
-      })
-      .catch((error) => console.log("Something went wrong", error));
-  }, [spotifyApi, playlistId]);
+  const accessToken = spotifyApi.getAccessToken();
 
-  console.log("playlist", playlist);
+  useEffect(() => {
+    console.log("should I", spotifyApi.getAccessToken());
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi
+        .getPlaylist(playlistId)
+        .then((data) => {
+          console.log("got data", data);
+          setPlaylist(data.body);
+        })
+        .catch((error) => console.log("Something went wrong", error));
+    }
+  }, [accessToken, spotifyApi, playlistId]);
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
