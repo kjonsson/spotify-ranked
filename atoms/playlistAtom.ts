@@ -10,3 +10,8 @@ export const playlistState = atom({
   key: "playlistState",
   default: null as null | SpotifyApi.SinglePlaylistResponse,
 });
+
+export const playlistsState = atom({
+  key: "playlistsState",
+  default: null as null | SpotifyApi.PlaylistObjectSimplified[],
+});

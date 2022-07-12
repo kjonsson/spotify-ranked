@@ -1,14 +1,7 @@
 import { useRecoilState } from "recoil";
 import { currentTrackIdState, isPlayingState } from "../atoms/songAtom";
-import useSpotify from "../hooks/useSpotify";
-
-const millisecondsToMinutesAndSeconds = (milliseconds: number) => {
-  const minutes = Math.floor(milliseconds / 60000);
-  const seconds = (milliseconds % 60000) / 1000;
-  return seconds === 60
-    ? minutes + 1 + ":00"
-    : minutes + ":" + (seconds < 10 ? "0" : "" + seconds.toFixed(0));
-};
+import useSpotify from "../hooks/useSpotifyApi";
+import { millisecondsToMinutesAndSeconds } from "../utils/time";
 
 const Song = ({
   order,

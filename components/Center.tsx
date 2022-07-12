@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { playlistIdState, playlistState } from "../atoms/playlistAtom";
 import sample from "lodash/sample";
-import useSpotify from "../hooks/useSpotify";
+import useSpotify from "../hooks/useSpotifyApi";
 import Songs from "./Songs";
 import useBackgroundColor from "../hooks/useBackgroundColor";
 

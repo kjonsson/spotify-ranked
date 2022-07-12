@@ -12,7 +12,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { currentTrackIdState, isPlayingState } from "../atoms/songAtom";
 import useSongInfo from "../hooks/useSongInfo";
-import useSpotify from "../hooks/useSpotify";
+import useSpotify from "../hooks/useSpotifyApi";
 
 const Player = () => {
   const spotifyApi = useSpotify();

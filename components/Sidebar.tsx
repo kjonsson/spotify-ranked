@@ -1,30 +1,8 @@
-import {
-  HomeIcon,
-  LibraryIcon,
-  PlusCircleIcon,
-  SearchIcon,
-} from "@heroicons/react/outline";
-import { signOut, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { playlistIdState } from "../atoms/playlistAtom";
-import useSpotify from "../hooks/useSpotify";
+import { HomeIcon, LibraryIcon, SearchIcon } from "@heroicons/react/outline";
+import { useSpotify } from "../hooks/useSpotify";
 
 const Sidebar = () => {
-  const spotifyApi = useSpotify();
-  const { data: session } = useSession();
-  const [playlists, setPlaylists] = useState<
-    SpotifyApi.PlaylistObjectSimplified[]
-  >([]);
-  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
-
-  useEffect(() => {
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi.getUserPlaylists().then((data) => {
-        setPlaylists(data.body.items);
-      });
-    }
-  }, [session, spotifyApi]);
+  const { playlists, selectPlaylist } = useSpotify();
 
   return (
     <div className="pb-36 h-screen p-5 overflow-y-scroll text-xs text-gray-500 lg:text-sm sm:max-w-[12rem lg:max-w-[15rem]">
@@ -43,12 +21,12 @@ const Sidebar = () => {
         </button>
         <hr className="border-t-[0.1px] border-gray-900" />
 
-        {playlists.map((playlist) => (
+        {playlists?.map((playlist) => (
           <p
             className="cursor-pointer hover:text-white"
             key={playlist.id}
             onClick={() => {
-              setPlaylistId(playlist.id);
+              selectPlaylist(playlist.id);
             }}
           >
             {playlist.name}

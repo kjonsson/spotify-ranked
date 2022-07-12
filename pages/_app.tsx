@@ -2,7 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { RecoilRoot } from "recoil";
-import { SpotifyProvider } from "../hooks/useSpotify2";
+import { SpotifyProvider } from "../hooks/useSpotify";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
