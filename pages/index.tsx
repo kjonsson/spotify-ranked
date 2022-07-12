@@ -21,14 +21,18 @@ const Home: NextPage = () => {
 
 export default Home;
 
-export async function getServerSideProps() {
-  console.log("getServerSideProps: getSession before");
-  const session = await getSession();
-  console.log("getServerSideProps: getSession after", session);
+// export async function getServerSideProps() {
+//   console.log("getServerSideProps: getSession before");
+//   const session = await getSession()
+//     .then((data) => {
+//       console.log("data", data);
+//       return data;
+//     })
+//     .catch((error) => console.log("error in get session", error));
 
-  return {
-    props: {
-      session,
-    },
-  };
-}
+//   return {
+//     props: {
+//       session,
+//     },
+//   };
+// }
