@@ -6,67 +6,13 @@ import {
   VolumeUpIcon,
   VolumeOffIcon,
 } from "@heroicons/react/solid";
-import { debounce } from "lodash";
-import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { currentTrackIdState, isPlayingState } from "../atoms/songAtom";
 import useSongInfo from "../hooks/useSongInfo";
-import useSpotify from "../hooks/useSpotifyApi";
+import { useSpotify } from "../hooks/useSpotify";
 
 const Player = () => {
-  const spotifyApi = useSpotify();
-  const { data: session } = useSession();
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
-  const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
-  const [volume, setVolume] = useState<number>(50);
+  const { isPlaying, volume, changeVolume, togglePlayPause } = useSpotify();
 
   const songInfo = useSongInfo();
-
-  const fetchCurrentSong = () => {
-    if (!songInfo) {
-      spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-        setCurrentTrackId(data.body?.item?.id ?? null);
-
-        spotifyApi.getMyCurrentPlaybackState().then((data) => {
-          setIsPlaying(data.body?.is_playing);
-        });
-      });
-    }
-  };
-
-  const handlePlayPause = () => {
-    spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body?.is_playing) {
-        spotifyApi.pause();
-        setIsPlaying(false);
-      } else {
-        spotifyApi.play();
-        setIsPlaying(true);
-      }
-    });
-  };
-
-  const handleChangeVolume = (volume: number) => {
-    setVolume(volume);
-    debounceAdjustVolume(volume);
-  };
-
-  const debounceAdjustVolume = useCallback(
-    debounce((volume) => {
-      spotifyApi
-        .setVolume(volume)
-        .catch((err) => console.log("err setting volume", err));
-    }, 500),
-    []
-  );
-
-  useEffect(() => {
-    if (spotifyApi.getAccessToken() && !currentTrackId) {
-      fetchCurrentSong();
-    }
-  }, [currentTrackId, spotifyApi, session]);
 
   return (
     <div className="grid h-24 grid-cols-3 px-2 text-xs text-white md:text-base md:px-8 bg-gradient-to-b from-black to-gray-900">
@@ -85,12 +31,12 @@ const Player = () => {
         <RewindIcon className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
         {isPlaying ? (
           <PauseIcon
-            onClick={handlePlayPause}
+            onClick={togglePlayPause}
             className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
           />
         ) : (
           <PlayIcon
-            onClick={handlePlayPause}
+            onClick={togglePlayPause}
             className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
           />
         )}
@@ -99,7 +45,7 @@ const Player = () => {
 
       <div className="flex items-center justify-end space-x-3 md:space-x-4">
         <VolumeOffIcon
-          onClick={() => volume > 0 && setVolume(volume - 10)}
+          onClick={() => volume > 0 && changeVolume(volume - 10)}
           className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
         />
         <input
@@ -108,10 +54,10 @@ const Player = () => {
           value={volume}
           min={0}
           max={100}
-          onChange={(e) => handleChangeVolume(Number(e.target.value))}
+          onChange={(e) => changeVolume(Number(e.target.value))}
         />
         <VolumeUpIcon
-          onClick={() => volume < 100 && setVolume(volume + 10)}
+          onClick={() => volume < 100 && changeVolume(volume + 10)}
           className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
         />
       </div>
