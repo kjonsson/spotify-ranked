@@ -6,26 +6,14 @@ import { playlistIdState, playlistState } from "../atoms/playlistAtom";
 import sample from "lodash/sample";
 import useSpotify from "../hooks/useSpotify";
 import Songs from "./Songs";
-
-const colors = [
-  "from-indigo-500",
-  "from-blue-500",
-  "from-red-500",
-  "from-yellow-500",
-  "from-pink-500",
-  "from-purple-500",
-];
+import useBackgroundColor from "../hooks/useBackgroundColor";
 
 const Center = () => {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
   const playlistId = useRecoilValue(playlistIdState);
-  const [color, setColor] = useState("");
   const [playlist, setPlaylist] = useRecoilState(playlistState);
-
-  useEffect(() => {
-    setColor(sample(colors) || colors[0]);
-  });
+  const color = useBackgroundColor(playlistId);
 
   const accessToken = spotifyApi.getAccessToken();
 

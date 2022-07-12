@@ -21,3 +21,16 @@ const useSpotify = () => {
 };
 
 export default useSpotify;
+
+/*
+  What do we want to have make
+  - playlistIdState
+  - playlistState
+  - currentTrackIdState
+  - isPlayingState
+
+  - get playlist
+  - getMyCurrentPlayingTrack
+  - getMyCurrentPlaybackState
+  - getUserPlaylists
+*/
