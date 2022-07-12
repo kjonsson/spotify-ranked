@@ -33,4 +33,9 @@ export default useSpotify;
   - getMyCurrentPlayingTrack
   - getMyCurrentPlaybackState
   - getUserPlaylists
+
+
+  Can have a single context
+
+  
 */
