@@ -103,6 +103,7 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
 
   const togglePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
+      console.log("data", data);
       if (data.body?.is_playing) {
         spotifyApi.pause();
         setIsPlaying(false);
