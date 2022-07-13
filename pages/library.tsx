@@ -7,7 +7,7 @@ const Home: NextPage = () => {
     <div className="h-screen overflow-hidden bg-black">
       <main className="flex">
         <Sidebar></Sidebar>
-        <h1 className="text-white">Home</h1>
+        <h1 className="text-white">Your Library</h1>
       </main>
 
       <div className="sticky bottom-0">

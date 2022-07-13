@@ -1,5 +1,6 @@
 import { debounce } from "lodash";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import {
   createContext,
   useCallback,
@@ -55,6 +56,13 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
   const { data: session } = useSession();
   const songInfo = useSongInfo();
   const [volume, setVolume] = useState<number>(50);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.playlistId) {
+      setPlaylistId(router.query.playlistId?.toString());
+    }
+  }, [router.query.playlistId]);
 
   const fetchCurrentSong = () => {
     if (!songInfo) {
@@ -83,7 +91,7 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
   }, [session, spotifyApi]);
 
   const selectPlaylist = (id: string) => {
-    setPlaylistId(id);
+    router.push(`/playlists/${id}`);
   };
 
   const accessToken = spotifyApi.getAccessToken();
