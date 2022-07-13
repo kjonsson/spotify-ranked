@@ -37,9 +37,6 @@ export default NextAuth({
     }),
   ],
   secret: process.env.JWT_SECRET,
-  pages: {
-    signIn: "/login",
-  },
   callbacks: {
     async jwt({ token, account, user }) {
       const isInitialSignIn = !!account && !!user;
