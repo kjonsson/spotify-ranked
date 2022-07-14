@@ -3,7 +3,7 @@ import Card from "../components/Card";
 import { useSpotify } from "../hooks/useSpotify";
 
 const Home: NextPage = () => {
-  const { searchString, search, searchResult } = useSpotify();
+  const { playSong, searchString, search, searchResult } = useSpotify();
 
   return (
     <div className="w-full h-screen p-2 overflow-y-scroll text-white">
@@ -46,6 +46,9 @@ const Home: NextPage = () => {
                   image={track.album.images[0].url}
                   title={track.name}
                   subtitle={track.artists[0].name}
+                  onClick={() => {
+                    playSong(track);
+                  }}
                 />
               ))}
             </div>
@@ -60,6 +63,7 @@ const Home: NextPage = () => {
                   image={artist?.images[0]?.url}
                   title={artist.name}
                   subtitle={"Artist"}
+                  onClick={() => {}}
                 />
               ))}
             </div>

@@ -2,13 +2,18 @@ const Card = ({
   image,
   title,
   subtitle,
+  onClick,
 }: {
   image: string;
   title: string;
   subtitle: string;
+  onClick: () => void;
 }) => {
   return (
-    <div className="flex flex-col justify-between max-w-xs p-5 m-3 text-white bg-gray-900 rounded-lg shadow-md cursor-pointer">
+    <div
+      onClick={onClick}
+      className="flex flex-col justify-between max-w-xs p-5 m-3 text-white bg-gray-900 rounded-lg shadow-md cursor-pointer"
+    >
       <div className="flex items-center justify-center">
         <img className="m-2 rounded-full aspect-square" src={image} alt="" />
       </div>

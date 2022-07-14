@@ -12,7 +12,7 @@ const Song = ({
 
   return (
     <div
-      onClick={() => playSong(track)}
+      onClick={() => playSong(track.track)}
       className="grid grid-cols-2 px-5 py-4 text-gray-500 rounded-lg hover:bg-gray-900"
     >
       <div className="flex items-center space-x-4">

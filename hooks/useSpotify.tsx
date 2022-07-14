@@ -23,7 +23,7 @@ type SpotifyContextType = {
   selectPlaylist: (id: string) => void;
   togglePlayPause: () => void;
   changeVolume: (volume: number) => void;
-  playSong: (track: SpotifyApi.PlaylistTrackObject) => void;
+  playSong: (track: SpotifyApi.TrackObjectFull) => void;
   search: (searchString: string) => void;
 };
 
@@ -115,20 +115,20 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     });
   };
 
-  const playSong = (track: SpotifyApi.PlaylistTrackObject) => {
-    if (!track?.track?.id || !track?.track.uri) {
-      console.log(
-        "unable to play due to missing id",
-        track.track?.id,
-        track.track?.uri
-      );
+  const playSong = (track?: SpotifyApi.TrackObjectFull) => {
+    if (!track) {
       return;
     }
 
-    setCurrentTrackId(track.track.id);
+    if (!track?.id || !track.uri) {
+      console.log("unable to play due to missing id", track?.id, track?.uri);
+      return;
+    }
+
+    setCurrentTrackId(track.id);
     setIsPlaying(true);
     spotifyApi.play({
-      uris: [track.track?.uri],
+      uris: [track?.uri],
     });
   };
 
