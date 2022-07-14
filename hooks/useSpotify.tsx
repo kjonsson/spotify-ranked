@@ -8,13 +8,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  playlistIdState,
-  playlistsState,
-  playlistState,
-} from "../atoms/playlistAtom";
-import { currentTrackIdState, isPlayingState } from "../atoms/songAtom";
 import useSongInfo from "./useSongInfo";
 import useSpotifyApi from "./useSpotifyApi";
 
@@ -24,6 +17,7 @@ type SpotifyContextType = {
   playlists: SpotifyApi.PlaylistObjectSimplified[] | null;
   playlistId: string | null;
   volume: number;
+  currentTrackId: null | string;
   selectPlaylist: (id: string) => void;
   togglePlayPause: () => void;
   changeVolume: (volume: number) => void;
@@ -36,6 +30,7 @@ const context = createContext<SpotifyContextType>({
   playlists: null,
   playlistId: null,
   volume: 50,
+  currentTrackId: null,
   selectPlaylist: () => {},
   togglePlayPause: () => {},
   changeVolume: () => {},
@@ -45,12 +40,14 @@ const context = createContext<SpotifyContextType>({
 export default context;
 
 export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
-  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
-  const [playlist, setPlaylist] = useRecoilState(playlistState);
-  const [playlists, setPlaylists] = useRecoilState(playlistsState);
-  const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
+  const [playlistId, setPlaylistId] = useState<null | string>(null);
+  const [playlist, setPlaylist] =
+    useState<null | SpotifyApi.SinglePlaylistResponse>(null);
+  const [playlists, setPlaylists] = useState<
+    null | SpotifyApi.PlaylistObjectSimplified[]
+  >(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTrackId, setCurrentTrackId] = useState<null | string>(null);
 
   const spotifyApi = useSpotifyApi();
   const { data: session } = useSession();
@@ -97,7 +94,7 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
   const accessToken = spotifyApi.getAccessToken();
 
   useEffect(() => {
-    if (spotifyApi.getAccessToken()) {
+    if (spotifyApi.getAccessToken() && !!playlistId) {
       spotifyApi
         .getPlaylist(playlistId)
         .then((data) => {
@@ -161,6 +158,7 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
         playlistId,
         playlists,
         volume,
+        currentTrackId,
         selectPlaylist,
         togglePlayPause,
         changeVolume,

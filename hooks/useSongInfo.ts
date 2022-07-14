@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { currentTrackIdState } from "../atoms/songAtom";
-import useSpotify from "./useSpotifyApi";
+import { useSpotify } from "./useSpotify";
+import useSpotifyApi from "./useSpotifyApi";
 
 type SpotifyImageType = {
   url: string;
@@ -20,9 +20,8 @@ type SpotifyTrackType = {
 };
 
 const useSongInfo = () => {
-  const spotifyApi = useSpotify();
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
+  const spotifyApi = useSpotifyApi();
+  const { currentTrackId } = useSpotify();
   const [songInfo, setSongInfo] = useState<null | SpotifyTrackType>(null);
 
   useEffect(() => {
