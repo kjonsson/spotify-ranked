@@ -4,31 +4,31 @@ import { millisecondsToMinutesAndSeconds } from "../utils/time";
 const Song = ({
   order,
   track,
+  album,
 }: {
   order: number;
-  track: SpotifyApi.PlaylistTrackObject;
+  track: SpotifyApi.TrackObjectSimplified;
+  album?: SpotifyApi.AlbumObjectSimplified;
 }) => {
   const { playSong } = useSpotify();
 
   return (
     <div
-      onClick={() => playSong(track.track)}
+      onDoubleClick={() => playSong(track)}
       className="grid grid-cols-2 px-5 py-4 text-gray-500 rounded-lg hover:bg-gray-900"
     >
       <div className="flex items-center space-x-4">
         <p>{order + 1}</p>
-        <img className="w-10 h-10" src={track.track?.album?.images[0]?.url} />
+        <img className="w-10 h-10" src={album?.images[0]?.url} />
         <div>
-          <p className="text-white truncate w-36 lg:w-64">
-            {track.track?.name}
-          </p>
-          <p className="w-40">{track.track?.artists[0].name}</p>
+          <p className="text-white truncate w-36 lg:w-64">{track?.name}</p>
+          <p className="w-40">{track?.artists[0].name}</p>
         </div>
       </div>
 
       <div className="flex items-center justify-between ml-auto md:ml-0">
-        <p className="hidden w-40 md:inline">{track.track?.album.name}</p>
-        <p>{millisecondsToMinutesAndSeconds(track.track?.duration_ms || 0)}</p>
+        <p className="hidden w-40 md:inline">{album?.name ?? null}</p>
+        <p>{millisecondsToMinutesAndSeconds(track?.duration_ms || 0)}</p>
       </div>
     </div>
   );

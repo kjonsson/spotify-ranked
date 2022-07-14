@@ -20,10 +20,12 @@ type SpotifyContextType = {
   currentTrackId: null | string;
   searchString: string;
   searchResult: null | SpotifyApi.SearchResponse;
+  artistSongs: null | SpotifyApi.TrackObjectSimplified[];
+  artistId: string | null;
   selectPlaylist: (id: string) => void;
   togglePlayPause: () => void;
   changeVolume: (volume: number) => void;
-  playSong: (track: SpotifyApi.TrackObjectFull) => void;
+  playSong: (track: SpotifyApi.TrackObjectSimplified | null) => void;
   search: (searchString: string) => void;
 };
 
@@ -36,6 +38,8 @@ const context = createContext<SpotifyContextType>({
   currentTrackId: null,
   searchString: "",
   searchResult: null,
+  artistSongs: null,
+  artistId: null,
   selectPlaylist: () => {},
   togglePlayPause: () => {},
   changeVolume: () => {},
@@ -57,6 +61,10 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
   const [searchString, setSearchString] = useState<string>("");
   const [searchResult, setSearchResult] =
     useState<null | SpotifyApi.SearchResponse>({});
+  const [artistId, setArtistId] = useState<null | string>(null);
+  const [artistSongs, setArtistSongs] = useState<
+    null | SpotifyApi.TrackObjectSimplified[]
+  >(null);
 
   const spotifyApi = useSpotifyApi();
   const { data: session } = useSession();
@@ -69,6 +77,12 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
       setPlaylistId(router.query.playlistId?.toString());
     }
   }, [router.query.playlistId]);
+
+  useEffect(() => {
+    if (router.query.artistId) {
+      setArtistId(router.query.artistId?.toString());
+    }
+  }, [router.query.artistId]);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken() && !currentTrackId) {
@@ -98,6 +112,25 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     }
   }, [accessToken, spotifyApi, playlistId]);
 
+  useEffect(() => {
+    if (spotifyApi.getAccessToken() && !!artistId) {
+      spotifyApi
+        .getArtistAlbums(artistId)
+        .then((data) => {
+          return Promise.all(
+            data.body.items.map((item) => spotifyApi.getAlbumTracks(item.id))
+          );
+        })
+        .then((data) => {
+          const songs = data.flatMap((data) => data.body.items);
+          setArtistSongs(songs);
+        })
+        .catch((error) =>
+          console.log("Something went wrong fetching playlist", error)
+        );
+    }
+  }, [accessToken, spotifyApi, artistId]);
+
   const selectPlaylist = (id: string) => {
     router.push(`/playlists/${id}`);
   };
@@ -115,7 +148,7 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     });
   };
 
-  const playSong = (track?: SpotifyApi.TrackObjectFull) => {
+  const playSong = (track: SpotifyApi.TrackObjectSimplified | null) => {
     if (!track) {
       return;
     }
@@ -182,6 +215,8 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
         currentTrackId,
         searchString,
         searchResult,
+        artistSongs,
+        artistId,
         selectPlaylist,
         togglePlayPause,
         changeVolume,

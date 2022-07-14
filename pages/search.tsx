@@ -1,9 +1,11 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import Card from "../components/Card";
 import { useSpotify } from "../hooks/useSpotify";
 
 const Home: NextPage = () => {
   const { playSong, searchString, search, searchResult } = useSpotify();
+  const router = useRouter();
 
   return (
     <div className="w-full h-screen p-2 overflow-y-scroll text-white">
@@ -63,7 +65,9 @@ const Home: NextPage = () => {
                   image={artist?.images[0]?.url}
                   title={artist.name}
                   subtitle={"Artist"}
-                  onClick={() => {}}
+                  onClick={() => {
+                    router.push(`/artists/${artist.id}`);
+                  }}
                 />
               ))}
             </div>
