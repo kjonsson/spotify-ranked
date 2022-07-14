@@ -1,8 +1,12 @@
 import type { NextPage } from "next";
+import Card from "../components/Card";
+import { useSpotify } from "../hooks/useSpotify";
 
 const Home: NextPage = () => {
+  const { searchString, search, searchResult } = useSpotify();
+
   return (
-    <div className="w-full p-2 text-white">
+    <div className="w-full h-screen p-2 overflow-y-scroll text-white">
       <div className="relative">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
@@ -27,10 +31,41 @@ const Home: NextPage = () => {
             className="block w-full max-w-sm p-3 pl-10 text-sm text-gray-900 border border-gray-300 border-none rounded-full bg-gray-50 focus:ring-0 focus:outline-none placeholder:text-gray-500"
             placeholder="Artist, Song, etc."
             required
+            value={searchString}
+            onChange={(e) => search(e.target.value)}
           />
         </div>
       </div>
-      <div>Search Results</div>
+      <div className="pb-24 mb-24">
+        {!!searchResult?.tracks && (
+          <div className="py-5">
+            <h2>Songs</h2>
+            <div className="grid grid-cols-5">
+              {searchResult.tracks.items.map((track) => (
+                <Card
+                  image={track.album.images[0].url}
+                  title={track.name}
+                  subtitle={track.artists[0].name}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {!!searchResult?.artists && (
+          <div className="py-5">
+            <h2>Artists</h2>
+            <div className="grid grid-cols-5">
+              {searchResult.artists.items.map((artist) => (
+                <Card
+                  image={artist?.images[0]?.url}
+                  title={artist.name}
+                  subtitle={"Artist"}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

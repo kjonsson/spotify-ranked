@@ -18,10 +18,13 @@ type SpotifyContextType = {
   playlistId: string | null;
   volume: number;
   currentTrackId: null | string;
+  searchString: string;
+  searchResult: null | SpotifyApi.SearchResponse;
   selectPlaylist: (id: string) => void;
   togglePlayPause: () => void;
   changeVolume: (volume: number) => void;
   playSong: (track: SpotifyApi.PlaylistTrackObject) => void;
+  search: (searchString: string) => void;
 };
 
 const context = createContext<SpotifyContextType>({
@@ -31,10 +34,13 @@ const context = createContext<SpotifyContextType>({
   playlistId: null,
   volume: 50,
   currentTrackId: null,
+  searchString: "",
+  searchResult: null,
   selectPlaylist: () => {},
   togglePlayPause: () => {},
   changeVolume: () => {},
   playSong: () => {},
+  search: () => {},
 });
 
 export default context;
@@ -48,6 +54,9 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
   >(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrackId, setCurrentTrackId] = useState<null | string>(null);
+  const [searchString, setSearchString] = useState<string>("");
+  const [searchResult, setSearchResult] =
+    useState<null | SpotifyApi.SearchResponse>({});
 
   const spotifyApi = useSpotifyApi();
   const { data: session } = useSession();
@@ -60,18 +69,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
       setPlaylistId(router.query.playlistId?.toString());
     }
   }, [router.query.playlistId]);
-
-  const fetchCurrentSong = () => {
-    if (!songInfo) {
-      spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-        setCurrentTrackId(data.body?.item?.id ?? null);
-
-        spotifyApi.getMyCurrentPlaybackState().then((data) => {
-          setIsPlaying(data.body?.is_playing);
-        });
-      });
-    }
-  };
 
   useEffect(() => {
     if (spotifyApi.getAccessToken() && !currentTrackId) {
@@ -87,12 +84,7 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     }
   }, [session, spotifyApi]);
 
-  const selectPlaylist = (id: string) => {
-    router.push(`/playlists/${id}`);
-  };
-
   const accessToken = spotifyApi.getAccessToken();
-
   useEffect(() => {
     if (spotifyApi.getAccessToken() && !!playlistId) {
       spotifyApi
@@ -105,6 +97,10 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
         );
     }
   }, [accessToken, spotifyApi, playlistId]);
+
+  const selectPlaylist = (id: string) => {
+    router.push(`/playlists/${id}`);
+  };
 
   const togglePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
@@ -150,6 +146,31 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     []
   );
 
+  const fetchCurrentSong = () => {
+    if (!songInfo) {
+      spotifyApi.getMyCurrentPlayingTrack().then((data) => {
+        setCurrentTrackId(data.body?.item?.id ?? null);
+
+        spotifyApi.getMyCurrentPlaybackState().then((data) => {
+          setIsPlaying(data.body?.is_playing);
+        });
+      });
+    }
+  };
+
+  const search = (searchString: string) => {
+    if (searchString) {
+      spotifyApi
+        .search(searchString, ["album", "artist", "track"], { limit: 10 })
+        .then((data) => {
+          setSearchResult(data.body);
+        });
+    } else {
+      setSearchResult({});
+    }
+    setSearchString(searchString);
+  };
+
   return (
     <context.Provider
       value={{
@@ -159,10 +180,13 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
         playlists,
         volume,
         currentTrackId,
+        searchString,
+        searchResult,
         selectPlaylist,
         togglePlayPause,
         changeVolume,
         playSong,
+        search,
       }}
     >
       {children}
