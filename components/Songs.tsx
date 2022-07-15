@@ -16,6 +16,7 @@ const Songs = () => {
             track={track.track}
             order={i}
             album={track.track.album}
+            subtitle={track.track.artists[0].name}
           />
         );
       })}

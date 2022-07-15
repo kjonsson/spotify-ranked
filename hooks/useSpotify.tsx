@@ -99,6 +99,7 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
   }, [session, spotifyApi]);
 
   const accessToken = spotifyApi.getAccessToken();
+  console.log("accessToken", accessToken);
   useEffect(() => {
     if (spotifyApi.getAccessToken() && !!playlistId) {
       spotifyApi

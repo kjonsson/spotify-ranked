@@ -1,6 +1,7 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import type { NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
+import { useQuery } from "react-query";
 import Song from "../../components/Song";
 import useBackgroundColor from "../../hooks/useBackgroundColor";
 import { useSpotify } from "../../hooks/useSpotify";
@@ -9,6 +10,20 @@ const ArtistsPage: NextPage = () => {
   const { data: session } = useSession();
   const { artistId, artistSongs } = useSpotify();
   const color = useBackgroundColor(artistId ?? "");
+
+  const { data } = useQuery<{ tracks: SpotifyApi.TrackObjectFull[] }>(
+    ["artists", artistId, session?.user.accessToken],
+    ({ queryKey: [_, artistId, accessToken] }) => {
+      console.log("fetching", artistId, accessToken);
+      return fetch(`/api/artists/${artistId}?accessToken=${accessToken}`).then(
+        (response) => response.json()
+      );
+    }
+  );
+
+  if (!data) {
+    return <div>Loading ...</div>;
+  }
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
@@ -37,8 +52,13 @@ const ArtistsPage: NextPage = () => {
       </section>
 
       <div>
-        {artistSongs?.map((song, i) => (
-          <Song track={song} order={i} />
+        {data.tracks.map((song, i) => (
+          <Song
+            key={song.artists[0].name + song.name + i}
+            track={song}
+            order={i}
+            subtitle={song.album.name}
+          />
         ))}
       </div>
     </div>

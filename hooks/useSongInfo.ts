@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
 import { useSpotify } from "./useSpotify";
 import useSpotifyApi from "./useSpotifyApi";
 

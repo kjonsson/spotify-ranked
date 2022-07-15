@@ -5,10 +5,12 @@ const Song = ({
   order,
   track,
   album,
+  subtitle,
 }: {
   order: number;
   track: SpotifyApi.TrackObjectFull;
   album?: SpotifyApi.AlbumObjectSimplified;
+  subtitle: string;
 }) => {
   const { playSong } = useSpotify();
 
@@ -22,7 +24,7 @@ const Song = ({
         <img className="w-10 h-10" src={album?.images[0]?.url} />
         <div>
           <p className="text-white truncate w-36 lg:w-64">{track?.name}</p>
-          <p className="w-40">{track?.artists[0].name}</p>
+          <p className="w-40">{subtitle}</p>
         </div>
       </div>
 
