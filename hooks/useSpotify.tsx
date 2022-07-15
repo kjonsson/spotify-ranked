@@ -20,12 +20,12 @@ type SpotifyContextType = {
   currentTrackId: null | string;
   searchString: string;
   searchResult: null | SpotifyApi.SearchResponse;
-  artistSongs: null | SpotifyApi.TrackObjectSimplified[];
+  artistSongs: null | SpotifyApi.TrackObjectFull[];
   artistId: string | null;
   selectPlaylist: (id: string) => void;
   togglePlayPause: () => void;
   changeVolume: (volume: number) => void;
-  playSong: (track: SpotifyApi.TrackObjectSimplified | null) => void;
+  playSong: (track: SpotifyApi.TrackObjectFull | null) => void;
   search: (searchString: string) => void;
 };
 
@@ -63,7 +63,7 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     useState<null | SpotifyApi.SearchResponse>({});
   const [artistId, setArtistId] = useState<null | string>(null);
   const [artistSongs, setArtistSongs] = useState<
-    null | SpotifyApi.TrackObjectSimplified[]
+    null | SpotifyApi.TrackObjectFull[]
   >(null);
 
   const spotifyApi = useSpotifyApi();
@@ -117,16 +117,22 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
       spotifyApi
         .getArtistAlbums(artistId)
         .then((data) => {
+          const ids = data.body.items.flatMap((item) => item.id);
+          return spotifyApi.getAlbums(ids);
+        })
+        .then((data) => {
+          const ids = data.body.albums.flatMap((album) =>
+            album.tracks.items.map((item) => item.id)
+          );
           return Promise.all(
-            data.body.items.map((item) => spotifyApi.getAlbumTracks(item.id))
+            ids.slice(0, 10).map((id) => spotifyApi.getTrack(id))
           );
         })
         .then((data) => {
-          const songs = data.flatMap((data) => data.body.items);
-          setArtistSongs(songs);
+          setArtistSongs(data.map((d) => d.body));
         })
         .catch((error) =>
-          console.log("Something went wrong fetching playlist", error)
+          console.log("Something went wrong fetching artist songs", error)
         );
     }
   }, [accessToken, spotifyApi, artistId]);
@@ -148,7 +154,7 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     });
   };
 
-  const playSong = (track: SpotifyApi.TrackObjectSimplified | null) => {
+  const playSong = (track: SpotifyApi.TrackObjectFull | null) => {
     if (!track) {
       return;
     }

@@ -7,7 +7,7 @@ const Song = ({
   album,
 }: {
   order: number;
-  track: SpotifyApi.TrackObjectSimplified;
+  track: SpotifyApi.TrackObjectFull;
   album?: SpotifyApi.AlbumObjectSimplified;
 }) => {
   const { playSong } = useSpotify();
@@ -27,6 +27,7 @@ const Song = ({
       </div>
 
       <div className="flex items-center justify-between ml-auto md:ml-0">
+        <p className="hidden w-40 md:inline">{track?.popularity}</p>
         <p className="hidden w-40 md:inline">{album?.name ?? null}</p>
         <p>{millisecondsToMinutesAndSeconds(track?.duration_ms || 0)}</p>
       </div>
