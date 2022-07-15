@@ -21,10 +21,10 @@ const Song = ({
     >
       <div className="flex items-center space-x-4">
         <p>{order + 1}</p>
-        <img className="w-10 h-10" src={album?.images[0]?.url} />
+        <img className="w-10 h-10" src={track.album?.images[0]?.url} />
         <div>
           <p className="text-white truncate w-36 lg:w-64">{track?.name}</p>
-          <p className="w-40">{subtitle}</p>
+          <p className="w-40 truncate">{subtitle}</p>
         </div>
       </div>
 

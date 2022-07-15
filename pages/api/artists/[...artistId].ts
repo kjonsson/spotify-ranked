@@ -17,18 +17,41 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const spotifyApi = createSpotifyApi(accessToken);
 
   try {
-    const artistAlbumResponse = await spotifyApi.getArtistAlbums(artistId);
+    const artistAlbumResponse = await spotifyApi.getArtistAlbums(artistId, {
+      limit: 50,
+    });
+
+    console.log(
+      "artistAlbumResponse",
+      artistAlbumResponse.body.items.map((item) => [
+        item.release_date,
+        item.name,
+      ])
+    );
 
     const albumIds = artistAlbumResponse.body.items.flatMap((item) => item.id);
-    const albumsResponse = await spotifyApi.getAlbums(albumIds);
 
-    const trackIds = albumsResponse.body.albums.flatMap((album) =>
+    let promises = [];
+    let sliceSize = 20;
+    let i = 0;
+
+    while (i < albumIds.length) {
+      promises.push(spotifyApi.getAlbums(albumIds.slice(i, i + sliceSize)));
+      i += sliceSize;
+    }
+
+    const albumsResponse = await Promise.all(promises);
+    const albums = albumsResponse.flatMap((res) => res.body.albums);
+
+    console.log("albums response 1", albums);
+
+    const trackIds = albums.flatMap((album) =>
       album.tracks.items.map((item) => item.id)
     );
 
-    const promises = [];
-    const sliceSize = 30;
-    let i = 0;
+    promises = [];
+    sliceSize = 30;
+    i = 0;
 
     while (i < trackIds.length) {
       promises.push(spotifyApi.getTracks(trackIds.slice(i, i + sliceSize)));
@@ -36,7 +59,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const tracksResponse = await Promise.all(promises);
-
     const tracks = tracksResponse.flatMap((res) => res.body.tracks);
 
     return res

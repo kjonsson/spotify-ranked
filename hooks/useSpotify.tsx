@@ -99,7 +99,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
   }, [session, spotifyApi]);
 
   const accessToken = spotifyApi.getAccessToken();
-  console.log("accessToken", accessToken);
   useEffect(() => {
     if (spotifyApi.getAccessToken() && !!playlistId) {
       spotifyApi
@@ -144,7 +143,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
 
   const togglePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      console.log("data", data);
       if (data.body?.is_playing) {
         spotifyApi.pause();
         setIsPlaying(false);

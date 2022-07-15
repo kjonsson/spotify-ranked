@@ -11,19 +11,20 @@ const ArtistsPage: NextPage = () => {
   const { artistId, artistSongs } = useSpotify();
   const color = useBackgroundColor(artistId ?? "");
 
-  const { data } = useQuery<{ tracks: SpotifyApi.TrackObjectFull[] }>(
+  const artistQuery = useQuery<{ tracks: SpotifyApi.TrackObjectFull[] }>(
     ["artists", artistId, session?.user.accessToken],
     ({ queryKey: [_, artistId, accessToken] }) => {
-      console.log("fetching", artistId, accessToken);
       return fetch(`/api/artists/${artistId}?accessToken=${accessToken}`).then(
         (response) => response.json()
       );
     }
   );
 
-  if (!data) {
+  if (!artistQuery.data) {
     return <div>Loading ...</div>;
   }
+
+  console.log("artistQuery", artistQuery);
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
@@ -44,15 +45,20 @@ const ArtistsPage: NextPage = () => {
       <section
         className={`w-full flex items-end space-x-7 bg-gradient-to-b to-black ${color} h-80 text-white p-8`}
       >
-        <img className="shadow-2xl h-44 w-44" src={""} />
+        <img
+          className="shadow-2xl h-44 w-44"
+          src={artistQuery.data?.tracks?.[0].album.images[0].url}
+        />
         <div>
           <p>ARTIST</p>
-          <h1 className="text-2xl md:text-3xl xl:text-5xl">{""}</h1>
+          <h1 className="text-2xl md:text-3xl xl:text-5xl">
+            {artistQuery.data?.tracks?.[0].artists[0].name}
+          </h1>
         </div>
       </section>
 
       <div>
-        {data.tracks.map((song, i) => (
+        {artistQuery.data?.tracks?.map((song, i) => (
           <Song
             key={song.artists[0].name + song.name + i}
             track={song}
