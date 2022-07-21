@@ -1,4 +1,4 @@
-import { HomeIcon, LibraryIcon, SearchIcon } from "@heroicons/react/outline";
+import { SearchIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import { useSpotify } from "../hooks/useSpotify";
 
@@ -6,7 +6,7 @@ const Sidebar = () => {
   const { playlists, selectPlaylist } = useSpotify();
 
   return (
-    <div className="pb-36 h-screen p-5 overflow-y-scroll text-xs text-gray-500 lg:text-sm sm:max-w-[12rem lg:max-w-[15rem]">
+    <div className="h-screen p-5 overflow-y-scroll text-xs text-gray-500 pb-36">
       <div className="space-y-4">
         <Link href="/search">
           <a className="flex items-center space-x-2 hover:text-white">

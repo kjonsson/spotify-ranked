@@ -16,3 +16,7 @@
 - comments
 - add or  remove tailwind scrollbar hide library
 - env variable public vs not
+
+
+# TODO
+- shared logout section for all

@@ -1,13 +1,19 @@
 import Sidebar from "./Sidebar";
 import Player from "./Player";
+import Header from "./Header";
 
 export default function Layout({ children }: { children: JSX.Element }) {
   return (
     <>
       <div className="h-screen overflow-hidden bg-black">
         <main className="flex">
-          <Sidebar></Sidebar>
-          {children}
+          <div className="w-[200px]">
+            <Sidebar></Sidebar>
+          </div>
+          <div>
+            <Header />
+            {children}
+          </div>
         </main>
 
         <div className="sticky bottom-0">

@@ -24,24 +24,8 @@ const ArtistsPage: NextPage = () => {
     return <div>Loading ...</div>;
   }
 
-  console.log("artistQuery", artistQuery);
-
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
-      <header className="absolute top-5 right-8">
-        <div
-          onClick={() => signOut()}
-          className="flex items-center p-1 pr-2 space-x-3 text-white bg-black rounded-full cursor-pointer opacity-90 hover:opacity-80"
-        >
-          <img
-            className="w-10 h-10 rounded-full"
-            src={session?.user?.image ?? ""}
-          />
-          <h2>{session?.user.name}</h2>
-          <ChevronDownIcon className="w-5 h-5" />
-        </div>
-      </header>
-
       <section
         className={`w-full flex items-end space-x-7 bg-gradient-to-b to-black ${color} h-80 text-white p-8`}
       >
