@@ -17,7 +17,7 @@ const Song = ({
   return (
     <div
       onDoubleClick={() => playSong(track)}
-      className="px-5 py-4 text-gray-500 rounded-lg hover:bg-gray-900"
+      className="flex justify-between px-5 py-4 text-gray-500 rounded-lg hover:bg-gray-900"
     >
       <div className="flex items-center space-x-4">
         <p>{order + 1}</p>
