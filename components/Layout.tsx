@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: JSX.Element }) {
           <div className="w-[200px]">
             <Sidebar></Sidebar>
           </div>
-          <div>
+          <div className="w-full">
             <Header />
             {children}
           </div>
