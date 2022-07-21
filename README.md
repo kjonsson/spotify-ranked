@@ -20,3 +20,5 @@
 
 # TODO
 - shared logout section for all
+- globally catch space bar to play/pause
+- show playbar where it shows current play status
