@@ -3,16 +3,14 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { createSpotifyApi } from "../../../lib/spotify";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  let { accessToken, artistId } = req.query;
-
-  if (!accessToken) {
+  if (!req.query.accessToken) {
     return res.status(500).json({ error: "No accessToken" });
   }
-  if (!artistId) {
+  if (!req.query.artistId) {
     return res.status(500).json({ error: "No artistId" });
   }
-  accessToken = accessToken.toString();
-  artistId = artistId.toString();
+  const accessToken = req.query.accessToken.toString();
+  const artistId = req.query.artistId.toString();
 
   const spotifyApi = createSpotifyApi(accessToken);
 
@@ -20,14 +18,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const artistAlbumResponse = await spotifyApi.getArtistAlbums(artistId, {
       limit: 50,
     });
-
-    console.log(
-      "artistAlbumResponse",
-      artistAlbumResponse.body.items.map((item) => [
-        item.release_date,
-        item.name,
-      ])
-    );
 
     const albumIds = artistAlbumResponse.body.items.flatMap((item) => item.id);
 
@@ -42,8 +32,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const albumsResponse = await Promise.all(promises);
     const albums = albumsResponse.flatMap((res) => res.body.albums);
-
-    console.log("albums response 1", albums);
 
     const trackIds = albums.flatMap((album) =>
       album.tracks.items.map((item) => item.id)
@@ -61,9 +49,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const tracksResponse = await Promise.all(promises);
     const tracks = tracksResponse.flatMap((res) => res.body.tracks);
 
-    return res
-      .status(200)
-      .json({ tracks: orderBy(tracks, ["popularity"], ["desc"]) });
+    const sortedTracks = orderBy(tracks, ["popularity"], ["desc"]).filter(
+      (track) => track.artists.map((artist) => artist.id).includes(artistId)
+    );
+
+    return res.status(200).json({ tracks: sortedTracks });
   } catch (error) {
     return res.status(500).json({ error });
   }

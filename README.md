@@ -22,3 +22,5 @@
 - shared logout section for all
 - globally catch space bar to play/pause
 - show playbar where it shows current play status
+- name of artist on artist page should not just be taken from track
+- we are getting all tracks from albums that the artist possibly just had one song on
