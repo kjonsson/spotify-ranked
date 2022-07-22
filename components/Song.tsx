@@ -28,7 +28,7 @@ const Song = ({
         </div>
       </div>
 
-      <div className="flex items-center justify-between ml-auto md:ml-0">
+      <div className="flex items-center justify-between w-[500px]">
         <p className="hidden w-40 md:inline">{track?.popularity}</p>
         <p className="hidden w-40 md:inline">{album?.name ?? null}</p>
         <p>{millisecondsToMinutesAndSeconds(track?.duration_ms || 0)}</p>
