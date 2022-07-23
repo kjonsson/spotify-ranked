@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <header className="absolute top-5 right-8">
       <div
-        onClick={() => signOut({ callbackUrl: "/" })}
+        onClick={() => signOut({ callbackUrl: "/login" })}
         className="flex items-center p-1 pr-2 space-x-3 text-white bg-black rounded-full cursor-pointer opacity-90 hover:opacity-80"
       >
         <img

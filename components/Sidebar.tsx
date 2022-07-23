@@ -1,4 +1,5 @@
 import { SearchIcon } from "@heroicons/react/outline";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSpotify } from "../hooks/useSpotify";
 
