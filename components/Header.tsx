@@ -5,7 +5,7 @@ const Header = () => {
   const { data: session } = useSession();
 
   return (
-    <header className="absolute top-5 right-8">
+    <header className="relative flex items-end justify-end pt-5 pr-5 sm:absolute sm:top-0 sm:right-0">
       <div
         onClick={() => signOut({ callbackUrl: "/login" })}
         className="flex items-center p-1 pr-2 space-x-3 text-white bg-black rounded-full cursor-pointer opacity-90 hover:opacity-80"

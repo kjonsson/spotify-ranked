@@ -26,3 +26,6 @@
 - logout is hardly clickable
 - logget out and logged in layout ... clean
 - split into more hooks (useCurrentPlaying, useArtist, useSong, ...something) and split data better
+- root and other routes do not redirect to login
+- performant lists for songs
+- closable sidebar

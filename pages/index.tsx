@@ -43,7 +43,7 @@ const Home: NextPage = () => {
           {!!searchResult?.tracks && (
             <div className="py-5">
               <h2>Songs</h2>
-              <div className="grid grid-cols-5">
+              <div className="grid grid-cols-2 sm:grid-cols-5">
                 {searchResult.tracks.items.map((track) => (
                   <Card
                     image={track.album.images[0].url}
@@ -60,7 +60,7 @@ const Home: NextPage = () => {
           {!!searchResult?.artists && (
             <div className="py-5">
               <h2>Artists</h2>
-              <div className="grid grid-cols-5">
+              <div className="grid grid-cols-2 sm:grid-cols-5">
                 {searchResult.artists.items.map((artist) => (
                   <Card
                     image={artist?.images[0]?.url}
