@@ -37,7 +37,9 @@ const useSongInfo = () => {
       setSongInfo(trackInfo);
     };
 
-    fetchSongInfo();
+    if (currentTrackId) {
+      fetchSongInfo();
+    }
   }, [currentTrackId, spotifyApi]);
 
   return songInfo;

@@ -23,3 +23,6 @@
 - show playbar where it shows current play status
 - name of artist on artist page should not just be taken from track
 - we are getting all tracks from albums that the artist possibly just had one song on
+- logout is hardly clickable
+- logget out and logged in layout ... clean
+- split into more hooks (useCurrentPlaying, useArtist, useSong, ...something) and split data better
