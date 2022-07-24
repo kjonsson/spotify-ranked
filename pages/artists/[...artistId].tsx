@@ -2,15 +2,11 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useQuery } from "react-query";
 import Song from "../../components/Song";
-import useBackgroundColor from "../../hooks/useBackgroundColor";
 import { useSpotify } from "../../hooks/useSpotify";
 
 const ArtistsPage: NextPage = () => {
   const { data: session } = useSession();
   const { artistId } = useSpotify();
-  const color = useBackgroundColor(artistId ?? "");
-
-  console.log("color", color);
 
   const artistQuery = useQuery<{ tracks: SpotifyApi.TrackObjectFull[] }>(
     ["artists", artistId, session?.user.accessToken],
@@ -27,9 +23,7 @@ const ArtistsPage: NextPage = () => {
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
-      <section
-        className={`w-full flex items-end space-x-7  to-black from-red-500 bg-gradient-to-b h-80 text-white p-8`}
-      >
+      <section className="flex items-end w-full p-8 text-white h-80 space-x-7">
         <div>
           <p>ARTIST</p>
           <h1 className="text-2xl md:text-3xl xl:text-5xl">

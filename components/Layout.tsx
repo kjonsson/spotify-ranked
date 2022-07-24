@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: JSX.Element }) {
               <Sidebar></Sidebar>
             </div>
           )}
-          <div className="w-full">
+          <div className="w-full bg-black">
             {hasSession && <Header />}
             {children}
           </div>

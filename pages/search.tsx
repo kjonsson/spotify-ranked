@@ -1,11 +1,30 @@
 import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useQuery } from "react-query";
 import Card from "../components/Card";
 import { useSpotify } from "../hooks/useSpotify";
 
 const Home: NextPage = () => {
   const { playSong, searchString, search, searchResult } = useSpotify();
   const router = useRouter();
+
+  const { data: session } = useSession();
+
+  const searchHistoryResponse = useQuery<{
+    recentlyPlayedTracks: SpotifyApi.PlayHistoryObject[];
+  }>(
+    ["search", "history", session?.user.accessToken],
+    ({ queryKey: [_, __, accessToken] }) => {
+      return fetch(`/api/search/history?accessToken=${accessToken}`).then(
+        (response) => response.json()
+      );
+    }
+  );
+
+  if (!searchHistoryResponse.data) {
+    return <div>Loading ...</div>;
+  }
 
   return (
     <div className="w-full h-screen text-white">
@@ -39,6 +58,27 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="h-screen overflow-y-scroll">
+        <div className="pb-24 mb-24">
+          {!!searchHistoryResponse?.data?.recentlyPlayedTracks && (
+            <div className="py-5">
+              <h2>Recently Played Songs</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                {searchHistoryResponse.data.recentlyPlayedTracks.map(
+                  (track) => (
+                    <Card
+                      image={track.track.album.images[0].url}
+                      title={track.track.name}
+                      subtitle={"Track"}
+                      onClick={() => {
+                        playSong(track.track);
+                      }}
+                    />
+                  )
+                )}
+              </div>
+            </div>
+          )}
+        </div>
         <div className="pb-24 mb-24">
           {!!searchResult?.tracks && (
             <div className="py-5">

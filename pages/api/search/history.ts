@@ -11,9 +11,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const spotifyApi = createSpotifyApi(accessToken);
 
   try {
-    const playlistResponse = await spotifyApi.getUserPlaylists();
+    const recentlyPlayedResponse = await spotifyApi.getMyRecentlyPlayedTracks();
 
-    return res.status(200).json({ albums: playlistResponse.body.items });
+    return res
+      .status(200)
+      .json({ recentlyPlayedTracks: recentlyPlayedResponse.body.items });
   } catch (error) {
     return res.status(500).json({ error });
   }
