@@ -1,4 +1,4 @@
-import { SearchIcon } from "@heroicons/react/outline";
+import { LibraryIcon, SearchIcon } from "@heroicons/react/outline";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSpotify } from "../hooks/useSpotify";
@@ -13,6 +13,12 @@ const Sidebar = () => {
           <a className="flex items-center space-x-2 hover:text-white">
             <SearchIcon className="w-5 h-5" />
             <p>Search</p>
+          </a>
+        </Link>
+        <Link href="/library" prefetch>
+          <a className="flex items-center space-x-2 hover:text-white">
+            <LibraryIcon className="w-5 h-5" />
+            <p>Your Library</p>
           </a>
         </Link>
         <hr className="border-t-[0.1px] border-gray-900" />
