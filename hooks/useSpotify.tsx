@@ -22,7 +22,6 @@ type SpotifyContextType = {
   searchResult: null | SpotifyApi.SearchResponse;
   artistSongs: null | SpotifyApi.TrackObjectFull[];
   artistId: string | null;
-  selectPlaylist: (id: string) => void;
   togglePlayPause: () => void;
   changeVolume: (volume: number) => void;
   playSong: (track: SpotifyApi.TrackObjectFull | null) => void;
@@ -40,7 +39,6 @@ const context = createContext<SpotifyContextType>({
   searchResult: null,
   artistSongs: null,
   artistId: null,
-  selectPlaylist: () => {},
   togglePlayPause: () => {},
   changeVolume: () => {},
   playSong: () => {},
@@ -137,10 +135,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     }
   }, [accessToken, spotifyApi, artistId]);
 
-  const selectPlaylist = (id: string) => {
-    router.push(`/playlists/${id}`);
-  };
-
   const togglePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing) {
@@ -222,7 +216,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
         searchResult,
         artistSongs,
         artistId,
-        selectPlaylist,
         togglePlayPause,
         changeVolume,
         playSong,
