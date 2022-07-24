@@ -28,3 +28,5 @@
 - globally catch space bar to play/pause
 - show playbar where it shows current play status
 - split into more hooks (useCurrentPlaying, useArtist, useSong, ...something) and split data better
+- recent searches on search page
+- main root page
