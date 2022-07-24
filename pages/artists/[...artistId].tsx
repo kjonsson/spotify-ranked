@@ -1,6 +1,5 @@
-import { ChevronDownIcon } from "@heroicons/react/outline";
 import type { NextPage } from "next";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useQuery } from "react-query";
 import Song from "../../components/Song";
 import useBackgroundColor from "../../hooks/useBackgroundColor";
@@ -8,7 +7,7 @@ import { useSpotify } from "../../hooks/useSpotify";
 
 const ArtistsPage: NextPage = () => {
   const { data: session } = useSession();
-  const { artistId, artistSongs } = useSpotify();
+  const { artistId } = useSpotify();
   const color = useBackgroundColor(artistId ?? "");
 
   const artistQuery = useQuery<{ tracks: SpotifyApi.TrackObjectFull[] }>(
