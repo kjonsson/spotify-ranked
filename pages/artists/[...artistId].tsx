@@ -10,6 +10,8 @@ const ArtistsPage: NextPage = () => {
   const { artistId } = useSpotify();
   const color = useBackgroundColor(artistId ?? "");
 
+  console.log("color", color);
+
   const artistQuery = useQuery<{ tracks: SpotifyApi.TrackObjectFull[] }>(
     ["artists", artistId, session?.user.accessToken],
     ({ queryKey: [_, artistId, accessToken] }) => {
@@ -26,12 +28,8 @@ const ArtistsPage: NextPage = () => {
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
       <section
-        className={`w-full flex items-end space-x-7 bg-gradient-to-b to-black ${color} h-80 text-white p-8`}
+        className={`w-full flex items-end space-x-7  to-black from-red-500 bg-gradient-to-b h-80 text-white p-8`}
       >
-        <img
-          className="shadow-2xl h-44 w-44"
-          src={artistQuery.data?.tracks?.[0].album.images[0].url}
-        />
         <div>
           <p>ARTIST</p>
           <h1 className="text-2xl md:text-3xl xl:text-5xl">

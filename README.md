@@ -21,8 +21,8 @@
 # TODO
 - cleanly catch no active device
 - logget out and logged in layout ... clean
-- root and other routes do not redirect to login
 - performant lists for songs
+- fix gradient
 - closable sidebar
 - cancellable search
 - globally catch space bar to play/pause

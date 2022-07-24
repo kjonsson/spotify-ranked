@@ -157,11 +157,17 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
       return;
     }
 
-    setCurrentTrackId(track.id);
-    setIsPlaying(true);
-    spotifyApi.play({
-      uris: [track?.uri],
-    });
+    spotifyApi
+      .play({
+        uris: [track?.uri],
+      })
+      .then(() => {
+        setCurrentTrackId(track.id);
+        setIsPlaying(true);
+      })
+      .catch((e) => {
+        console.log("Error playing", e);
+      });
   };
 
   const changeVolume = (volume: number) => {

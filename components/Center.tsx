@@ -7,10 +7,12 @@ const Center = () => {
   const { playlist, playlistId } = useSpotify();
   const color = useBackgroundColor(playlistId ?? "");
 
+  console.log("color", color);
+
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
       <section
-        className={`w-full flex items-end space-x-7 bg-gradient-to-b to-black ${color} h-80 text-white p-8`}
+        className={`w-full flex items-end space-x-7 bg-gradient-to-b to-black from-red-500 h-80 text-white p-8`}
       >
         <img className="shadow-2xl h-44 w-44" src={playlist?.images[0]?.url} />
         <div>
