@@ -4,8 +4,8 @@ module.exports = {
     async rewrites() {
       return [
         {
-          source: '/search',
-          destination: '/',
+          source: '/',
+          destination: '/search',
         },
       ]
     },
