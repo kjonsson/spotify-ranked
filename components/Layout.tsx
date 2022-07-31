@@ -8,8 +8,6 @@ export default function Layout({ children }: { children: JSX.Element }) {
   const { data: session } = useSession();
   const { pathname } = useRouter();
 
-  console.log("layout session", session);
-
   const hasSession = !!session;
 
   const hasSidebar = !pathname.includes("login");
