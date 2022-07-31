@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import SpotifyProvider from "next-auth/providers/spotify";
 import spotifyApi, { LOGIN_URL } from "../../../lib/spotify";
@@ -27,7 +27,7 @@ const refreshAccessToken = async (token: JWT): Promise<JWT> => {
   }
 };
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     SpotifyProvider({
@@ -36,13 +36,12 @@ export default NextAuth({
       authorization: LOGIN_URL,
     }),
   ],
-  secret: process.env.JWT_SECRET,
   callbacks: {
     async jwt({ token, account, user }) {
       const isInitialSignIn = !!account && !!user;
 
       if (isInitialSignIn) {
-        console.log("jwt callback - Initial sign in");
+        console.log("jwt callback - Initial sign in, token:", token, 'account', account);
         return {
           ...token,
           accessToken: account.access_token,
@@ -57,11 +56,11 @@ export default NextAuth({
       const isExpired = Date.now() >= Number(loggedInToken.accessTokenExpires);
 
       if (!isExpired) {
-        console.log("jwt callback - not expired");
+        console.log("jwt callback - not expired", loggedInToken);
         return loggedInToken;
       }
 
-      console.log("jwt callback - expired");
+      console.log("jwt callback - expired", loggedInToken);
       return await refreshAccessToken(loggedInToken);
     },
     async session({ token, session }) {
@@ -77,4 +76,6 @@ export default NextAuth({
       return session;
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

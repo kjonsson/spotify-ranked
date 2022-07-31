@@ -1,5 +1,5 @@
-import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
+import type { GetServerSideProps, NextPage } from "next";
+import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import Card from "../components/Card";
@@ -52,3 +52,20 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { session }
+  }
+}
