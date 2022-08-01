@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className="w-full h-screen p-5 pt-20 text-white">
+    <div className="w-full h-screen p-5 pt-20 text-white bg-[#121212]">
       <div className="h-screen overflow-y-scroll">
         <div className="pb-24 mb-24">
           {!!libraryQuery?.data?.albums && (
