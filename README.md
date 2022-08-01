@@ -22,7 +22,6 @@
 - cleanly catch no active device
 - logged out and logged in layout ... clean
 - performant lists for songs
-- fix gradient
 - closable sidebar
 - cancellable search
 - globally catch space bar to play/pause

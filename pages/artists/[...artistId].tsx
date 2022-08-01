@@ -7,9 +7,9 @@ import Song from "../../components/Song";
 const ArtistsPage: NextPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
-  const artistId = router.query.playlistId?.toString();
+  const artistId = router.query.artistId?.toString();
 
-  const artistQuery = useQuery<{ tracks: SpotifyApi.TrackObjectFull[] }>(
+  const artistQuery = useQuery<{ artist: SpotifyApi.SingleArtistResponse, tracks: SpotifyApi.TrackObjectFull[] }>(
     ["artists", artistId, session?.user.accessToken],
     ({ queryKey: [_, artistId, accessToken] }) => {
       return fetch(`/api/artists/${artistId}?accessToken=${accessToken}`).then(
@@ -24,16 +24,17 @@ const ArtistsPage: NextPage = () => {
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
-      <section className="flex items-end w-full p-8 text-white h-80 space-x-7">
+      <section className="flex items-end w-full p-8 text-white h-80 space-x-7 bg-gradient-to-b from-lime-800 to-[#121212]">
+        <img className="shadow-2xl h-44 w-44" src={artistQuery.data.artist?.images[0]?.url} />
         <div>
           <p>ARTIST</p>
           <h1 className="text-2xl md:text-3xl xl:text-5xl">
-            {artistQuery.data?.tracks?.[0].artists[0].name}
+            {artistQuery.data.artist?.name}
           </h1>
         </div>
       </section>
 
-      <div>
+      <div className="bg-[#121212]">
         {artistQuery.data?.tracks?.map((song, i) => (
           <Song
             key={song.artists[0].name + song.name + i}

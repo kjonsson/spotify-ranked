@@ -15,6 +15,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const spotifyApi = createSpotifyApi(accessToken);
 
   try {
+    const artistResponse = await spotifyApi.getArtist(artistId);
+
     const artistAlbumResponse = await spotifyApi.getArtistAlbums(artistId, {
       limit: 50,
     });
@@ -53,7 +55,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       (track) => track.artists.map((artist) => artist.id).includes(artistId)
     );
 
-    return res.status(200).json({ tracks: sortedTracks });
+    return res.status(200).json({ artist: artistResponse.body, tracks: sortedTracks });
   } catch (error) {
     return res.status(500).json({ error });
   }
