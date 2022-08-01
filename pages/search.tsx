@@ -16,9 +16,9 @@ const Home: NextPage = () => {
   }>(
     ["search", "history", session?.user.accessToken],
     ({ queryKey: [_, __, accessToken] }) => {
-      return fetch(`/api/search/history?accessToken=${accessToken}`).then(
-        (response) => response.json()
-      );
+      return fetch(
+        `/api/search/history?accessToken=${accessToken}`
+      ).then((response) => response.json());
     }
   );
 
@@ -58,27 +58,28 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="h-screen overflow-y-scroll">
-        <div className="pb-24 mb-24">
-          {!!searchHistoryResponse?.data?.recentlyPlayedTracks && (
-            <div className="py-5">
-              <h2>Recently Played Songs</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                {searchHistoryResponse.data.recentlyPlayedTracks.map(
-                  (track) => (
-                    <Card
-                      image={track.track.album.images[0].url}
-                      title={track.track.name}
-                      subtitle={"Track"}
-                      onClick={() => {
-                        playSong(track.track);
-                      }}
-                    />
-                  )
-                )}
+        {!searchResult?.tracks &&
+          !!searchHistoryResponse?.data?.recentlyPlayedTracks && (
+            <div className="pb-24 mb-24">
+              <div className="py-5">
+                <h2>Recently Played Songs</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                  {searchHistoryResponse.data.recentlyPlayedTracks.map(
+                    (track) => (
+                      <Card
+                        image={track.track.album.images[0].url}
+                        title={track.track.name}
+                        subtitle={"Track"}
+                        onClick={() => {
+                          playSong(track.track);
+                        }}
+                      />
+                    )
+                  )}
+                </div>
               </div>
             </div>
           )}
-        </div>
         <div className="pb-24 mb-24">
           {!!searchResult?.tracks && (
             <div className="py-5">
@@ -123,18 +124,18 @@ const Home: NextPage = () => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context)
+  const session = await getSession(context);
 
   if (!session) {
     return {
       redirect: {
-        destination: '/login',
+        destination: "/login",
         permanent: false,
       },
-    }
+    };
   }
 
   return {
-    props: { session }
-  }
-}
+    props: { session },
+  };
+};
