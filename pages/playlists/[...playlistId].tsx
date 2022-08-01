@@ -1,14 +1,35 @@
 import { GetServerSideProps, NextPage } from "next";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
 import Songs from "../../components/Songs";
-import { useSpotify } from "../../hooks/useSpotify";
 
 const PlaylistPage: NextPage = () => {
-  const { playlist, playlistId } = useSpotify();
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  const playlistId = router.query.playlistId?.toString();
+
+  const playlistQuery = useQuery<{ playlist: SpotifyApi.SinglePlaylistResponse }>(
+    ["playlist", playlistId, session?.user.accessToken],
+    ({ queryKey: [_, playlistId, accessToken] }) => {
+      return fetch(`/api/playlists/${playlistId}?accessToken=${accessToken}`).then(
+        (response) => response.json()
+      );
+    }
+  );
+
+  if (!playlistQuery.data) {
+    return <div>Loading ...</div>;
+  }
+
+  const playlist = playlistQuery.data.playlist;
 
   if (!playlist) {
     return null;
   }
+
+  const tracks = playlist.tracks.items.map(item => item.track).filter(item => !!item) as SpotifyApi.TrackObjectFull[];
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
@@ -23,7 +44,7 @@ const PlaylistPage: NextPage = () => {
       </section>
 
       <div>
-        <Songs />
+        <Songs tracks={tracks}/>
       </div>
     </div>
   );

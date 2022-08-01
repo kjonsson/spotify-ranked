@@ -13,9 +13,7 @@ import useSpotifyApi from "./useSpotifyApi";
 
 type SpotifyContextType = {
   isPlaying: boolean;
-  playlist: SpotifyApi.SinglePlaylistResponse | null;
   playlists: SpotifyApi.PlaylistObjectSimplified[] | null;
-  playlistId: string | null;
   volume: number;
   currentTrackId: null | string;
   searchString: string;
@@ -30,9 +28,7 @@ type SpotifyContextType = {
 
 const context = createContext<SpotifyContextType>({
   isPlaying: false,
-  playlist: null,
   playlists: null,
-  playlistId: null,
   volume: 50,
   currentTrackId: null,
   searchString: "",
@@ -48,9 +44,6 @@ const context = createContext<SpotifyContextType>({
 export default context;
 
 export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
-  const [playlistId, setPlaylistId] = useState<null | string>(null);
-  const [playlist, setPlaylist] =
-    useState<null | SpotifyApi.SinglePlaylistResponse>(null);
   const [playlists, setPlaylists] = useState<
     null | SpotifyApi.PlaylistObjectSimplified[]
   >(null);
@@ -69,12 +62,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
   const songInfo = useSongInfo();
   const [volume, setVolume] = useState<number>(50);
   const router = useRouter();
-
-  useEffect(() => {
-    if (router.query.playlistId) {
-      setPlaylistId(router.query.playlistId?.toString());
-    }
-  }, [router.query.playlistId]);
 
   useEffect(() => {
     if (router.query.artistId) {
@@ -97,18 +84,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
   }, [session, spotifyApi]);
 
   const accessToken = spotifyApi.getAccessToken();
-  useEffect(() => {
-    if (spotifyApi.getAccessToken() && !!playlistId) {
-      spotifyApi
-        .getPlaylist(playlistId)
-        .then((data) => {
-          setPlaylist(data.body);
-        })
-        .catch((error) =>
-          console.log("Something went wrong fetching playlist", error)
-        );
-    }
-  }, [accessToken, spotifyApi, playlistId]);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken() && !!artistId) {
@@ -213,8 +188,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     <context.Provider
       value={{
         isPlaying,
-        playlist,
-        playlistId,
         playlists,
         volume,
         currentTrackId,
