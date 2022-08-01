@@ -13,7 +13,6 @@ import useSpotifyApi from "./useSpotifyApi";
 
 type SpotifyContextType = {
   isPlaying: boolean;
-  playlists: SpotifyApi.PlaylistObjectSimplified[] | null;
   volume: number;
   currentTrackId: null | string;
   searchString: string;
@@ -28,7 +27,6 @@ type SpotifyContextType = {
 
 const context = createContext<SpotifyContextType>({
   isPlaying: false,
-  playlists: null,
   volume: 50,
   currentTrackId: null,
   searchString: "",
@@ -44,9 +42,6 @@ const context = createContext<SpotifyContextType>({
 export default context;
 
 export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
-  const [playlists, setPlaylists] = useState<
-    null | SpotifyApi.PlaylistObjectSimplified[]
-  >(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrackId, setCurrentTrackId] = useState<null | string>(null);
   const [searchString, setSearchString] = useState<string>("");
@@ -74,14 +69,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
       fetchCurrentSong();
     }
   }, [currentTrackId, spotifyApi, session]);
-
-  useEffect(() => {
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi.getUserPlaylists().then((data) => {
-        setPlaylists(data.body.items);
-      });
-    }
-  }, [session, spotifyApi]);
 
   const accessToken = spotifyApi.getAccessToken();
 
@@ -188,7 +175,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     <context.Provider
       value={{
         isPlaying,
-        playlists,
         volume,
         currentTrackId,
         searchString,
