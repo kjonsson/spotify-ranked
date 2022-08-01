@@ -1,14 +1,18 @@
 import { GetServerSideProps, NextPage } from "next";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import Songs from "../../components/Songs";
 
 const PlaylistPage: NextPage = () => {
   const router = useRouter();
   const { data: session } = useSession();
-
   const playlistId = router.query.playlistId?.toString();
+
+  if (!playlistId) {
+    return null;
+  }
 
   const playlistQuery = useQuery<{ playlist: SpotifyApi.SinglePlaylistResponse }>(
     ["playlist", playlistId, session?.user.accessToken],
@@ -34,7 +38,7 @@ const PlaylistPage: NextPage = () => {
   return (
     <div className="flex-grow h-screen overflow-y-scroll">
       <section
-        className={`w-full flex items-end space-x-7 h-80 text-white p-8`}
+        className={`w-full flex items-end space-x-7 h-80 text-white p-8 bg-gradient-to-b from-lime-800 to-[#121212]`}
       >
         <img className="shadow-2xl h-44 w-44" src={playlist?.images[0]?.url} />
         <div>
@@ -43,7 +47,7 @@ const PlaylistPage: NextPage = () => {
         </div>
       </section>
 
-      <div>
+      <div className="bg-[#121212]">
         <Songs tracks={tracks}/>
       </div>
     </div>

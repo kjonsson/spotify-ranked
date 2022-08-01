@@ -1,12 +1,13 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import Song from "../../components/Song";
-import { useSpotify } from "../../hooks/useSpotify";
 
 const ArtistsPage: NextPage = () => {
   const { data: session } = useSession();
-  const { artistId } = useSpotify();
+  const router = useRouter();
+  const artistId = router.query.playlistId?.toString();
 
   const artistQuery = useQuery<{ tracks: SpotifyApi.TrackObjectFull[] }>(
     ["artists", artistId, session?.user.accessToken],

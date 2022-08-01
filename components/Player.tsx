@@ -15,7 +15,7 @@ const Player = () => {
   const songInfo = useSongInfo();
 
   return (
-    <div className="grid h-24 grid-cols-3 px-2 text-xs text-white md:text-base md:px-8 bg-gradient-to-b from-black to-gray-900">
+    <div className="grid h-24 grid-cols-3 px-2 text-xs text-white md:text-base md:px-8 bg-[#181818]">
       <div className="flex items-center space-x-4">
         <img
           className="w-10 h-10 md:inline"
