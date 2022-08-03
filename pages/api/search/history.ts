@@ -1,3 +1,4 @@
+import { uniqBy } from "lodash";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createSpotifyApi } from "../../../lib/spotify";
 
@@ -13,9 +14,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const recentlyPlayedResponse = await spotifyApi.getMyRecentlyPlayedTracks();
 
+    let tracks = recentlyPlayedResponse.body.items;
+
     return res
       .status(200)
-      .json({ recentlyPlayedTracks: recentlyPlayedResponse.body.items });
+      .json({ recentlyPlayedTracks: uniqBy(tracks, (track) => track.track.id) });
   } catch (error) {
     return res.status(500).json({ error });
   }
