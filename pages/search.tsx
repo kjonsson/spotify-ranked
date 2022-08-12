@@ -3,9 +3,13 @@ import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import Card from "../components/Card";
+import { config } from "../config";
 import { useSpotify } from "../hooks/useSpotify";
 
 const Home: NextPage = () => {
+
+  console.log(config.KRIS)
+
   const { playSong, searchString, search, searchResult } = useSpotify();
   const router = useRouter();
 
