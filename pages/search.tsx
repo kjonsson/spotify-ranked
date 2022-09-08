@@ -3,13 +3,9 @@ import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import Card from "../components/Card";
-import { config } from "../config";
 import { useSpotify } from "../hooks/useSpotify";
 
 const Home: NextPage = () => {
-
-  console.log(config.KRIS)
-
   const { playSong, searchString, search, searchResult } = useSpotify();
   const router = useRouter();
 
@@ -20,9 +16,9 @@ const Home: NextPage = () => {
   }>(
     ["search", "history", session?.user.accessToken],
     ({ queryKey: [_, __, accessToken] }) => {
-      return fetch(
-        `/api/search/history?accessToken=${accessToken}`
-      ).then((response) => response.json());
+      return fetch(`/api/search/history?accessToken=${accessToken}`).then(
+        (response) => response.json()
+      );
     }
   );
 
@@ -73,7 +69,7 @@ const Home: NextPage = () => {
                       <Card
                         image={track.track.album.images[0].url}
                         title={track.track.name}
-                        subtitle={"Track"}
+                        subtitle={track.track.artists[0].name}
                         onClick={() => {
                           playSong(track.track);
                         }}
