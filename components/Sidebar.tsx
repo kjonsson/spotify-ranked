@@ -28,7 +28,7 @@ const Sidebar = () => {
       <input type="checkbox" id="menu-open" className="hidden" />
 
       <label
-        for="menu-open"
+        htmlFor="menu-open"
         className="bg-red-500 absolute right-2 bottom-2 shadow-lg rounded-full p-2 text-gray-600 md:hidden"
         data-dev-hint="floating action button"
       >
@@ -53,7 +53,7 @@ const Sidebar = () => {
         data-dev-hint="mobile menu bar"
       >
         <label
-          for="menu-open"
+          htmlFor="menu-open"
           id="mobile-menu-button"
           className="m-2 p-2 focus:outline-none hover:cursor-pointer hover:text-white hover:bg-gray-700 rounded-md"
         >
