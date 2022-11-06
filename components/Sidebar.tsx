@@ -24,30 +24,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className="z-50 relative min-h-0 md:min-h-screen md:flex" data-dev-hint="container">
-      <input type="checkbox" id="menu-open" className="hidden" />
-
-      <label
-        htmlFor="menu-open"
-        className="bg-red-500 absolute right-2 bottom-2 shadow-lg rounded-full p-2 text-gray-600 md:hidden"
-        data-dev-hint="floating action button"
-      >
-        <svg
-          className="h-6 w-6"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </label>
-
+    <div className="w-0 md:w-auto z-50 relative min-h-0 md:min-h-screen md:flex" data-dev-hint="container">
       <header
         className="text-gray-100 flex justify-between md:hidden z-50 relative"
         data-dev-hint="mobile menu bar"
