@@ -1,4 +1,7 @@
-import { ChevronDownIcon, LogoutIcon } from "@heroicons/react/outline";
+import {
+  ChevronDownIcon,
+  ArrowRightOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 
 const Header = () => {
@@ -15,7 +18,7 @@ const Header = () => {
           src={session?.user?.image ?? ""}
         />
         <h2>{session?.user.name}</h2>
-        <LogoutIcon className="w-5 h-5" />
+        <ArrowRightOnRectangleIcon className="w-5 h-5" />
       </div>
     </header>
   );
