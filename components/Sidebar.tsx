@@ -16,9 +16,9 @@ const Sidebar = () => {
   }>(
     ["playlists", session?.user.accessToken],
     ({ queryKey: [_, accessToken] }) => {
-      return fetch(
-        `/api/playlists?accessToken=${accessToken}`
-      ).then((response) => response.json());
+      return fetch(`/api/playlists?accessToken=${accessToken}`).then(
+        (response) => response.json()
+      );
     }
   );
 
@@ -87,34 +87,32 @@ const Sidebar = () => {
           <nav data-dev-hint="main navigation">
             <div className="h-screen p-5 overflow-y-scroll text-xs text-gray-500 pb-36">
               <div className="space-y-4">
-                <Link href="/search">
-                  <a
-                    className="flex items-center space-x-2 hover:text-white"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <MagnifyingGlassIcon className="w-5 h-5" />
-                    <p>Search</p>
-                  </a>
+                <Link
+                  href="/search"
+                  className="flex items-center space-x-2 hover:text-white"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <MagnifyingGlassIcon className="w-5 h-5" />
+                  <p>Search</p>
                 </Link>
-                <Link href="/library">
-                  <a
-                    className="flex items-center space-x-2 hover:text-white"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <BuildingLibraryIcon className="w-5 h-5" />
-                    <p>Your Library</p>
-                  </a>
+                <Link
+                  href="/library"
+                  className="flex items-center space-x-2 hover:text-white"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <BuildingLibraryIcon className="w-5 h-5" />
+                  <p>Your Library</p>
                 </Link>
                 <hr className="border-t-[0.1px] border-gray-900" />
 
                 {playlistsQuery.data.playlists.map((playlist) => (
-                  <Link key={playlist.id} href={`/playlists/${playlist.id}`}>
-                    <a
-                      className="flex items-center space-x-2 hover:text-white"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      <p>{playlist.name}</p>
-                    </a>
+                  <Link
+                    key={playlist.id}
+                    href={`/playlists/${playlist.id}`}
+                    className="flex items-center space-x-2 hover:text-white"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <p>{playlist.name}</p>
                   </Link>
                 ))}
               </div>
