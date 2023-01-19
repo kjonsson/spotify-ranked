@@ -1,0 +1,8 @@
+{
+  "tabWidth": 4,
+  "useTabs": false,
+  "prettier.printWidth": 150,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "react/jsx-indent": "off", 
+}
