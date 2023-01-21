@@ -21,7 +21,7 @@ const Card = ({
                     alt=""
                 />
             </div>
-            <div className="cursor-default select-none pt-7">
+            <div className="select-none pt-7">
                 <h5 className="mb-2 text-sm font-bold tracking-tight text-white truncate">
                     {title}
                 </h5>

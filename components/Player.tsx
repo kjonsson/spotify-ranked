@@ -6,8 +6,7 @@ import {
     SpeakerWaveIcon,
     SpeakerXMarkIcon,
 } from '@heroicons/react/24/solid';
-import { useSession } from 'next-auth/react';
-import { useQuery } from 'react-query';
+import { useSpotifyPlayback } from '../hooks/useSpotifyPlayback';
 import { useSpotify } from '../hooks/useSpotify';
 
 function isTrackObjectFull(data: any): data is SpotifyApi.TrackObjectFull {
@@ -17,20 +16,9 @@ function isTrackObjectFull(data: any): data is SpotifyApi.TrackObjectFull {
 const Player = () => {
     const { isPlaying, volume, changeVolume, togglePlayPause } = useSpotify();
 
-    const { data: session } = useSession();
+    const { playbackState } = useSpotifyPlayback();
 
-    const playbackState = useQuery<{
-        currentPlayingTrack: SpotifyApi.CurrentPlaybackResponse;
-    }>(
-        ['playback', session?.user.accessToken],
-        ({ queryKey: [_, accessToken] }) => {
-            return fetch(`/api/playback?accessToken=${accessToken}`).then(
-                (response) => response.json()
-            );
-        }
-    );
-
-    const currentPlayingTrack = playbackState.data?.currentPlayingTrack;
+    const currentPlayingTrack = playbackState?.currentPlayingTrack;
     const songInfo = currentPlayingTrack?.item;
 
     console.log('songInfo', songInfo);

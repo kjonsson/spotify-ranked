@@ -27,9 +27,9 @@ const Home: NextPage = () => {
     return (
         <div className="h-screen w-full bg-[#121212] p-5 pt-20 text-white">
             <div className="h-screen overflow-y-scroll">
-                <div className="pb-24 mb-24">
+                <div className="mb-24 pb-24">
                     {!!libraryQuery?.data?.albums && (
-                        <div className="py-5 cursor-default select-none">
+                        <div className="select-none  py-5">
                             <h2>Albums</h2>
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                                 {libraryQuery.data.albums.map((album) => (
