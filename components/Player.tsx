@@ -1,70 +1,95 @@
 import {
-  PlayIcon,
-  ForwardIcon,
-  PauseIcon,
-  BackwardIcon,
-  SpeakerWaveIcon,
-  SpeakerXMarkIcon,
-} from "@heroicons/react/24/solid";
-import useSongInfo from "../hooks/useSongInfo";
-import { useSpotify } from "../hooks/useSpotify";
+    PlayIcon,
+    ForwardIcon,
+    PauseIcon,
+    BackwardIcon,
+    SpeakerWaveIcon,
+    SpeakerXMarkIcon,
+} from '@heroicons/react/24/solid';
+import { useSession } from 'next-auth/react';
+import { useQuery } from 'react-query';
+import { useSpotify } from '../hooks/useSpotify';
+
+function isTrackObjectFull(data: any): data is SpotifyApi.TrackObjectFull {
+    return (data as SpotifyApi.TrackObjectFull).album !== undefined;
+}
 
 const Player = () => {
-  const { isPlaying, volume, changeVolume, togglePlayPause } = useSpotify();
+    const { isPlaying, volume, changeVolume, togglePlayPause } = useSpotify();
 
-  const songInfo = useSongInfo();
+    const { data: session } = useSession();
 
-  return (
-    <div className="grid h-24 grid-cols-3 px-2 text-xs text-white md:text-base md:px-8 bg-[#181818]">
-      <div className="flex items-center space-x-4">
-        {songInfo?.album?.images?.[0].url && (
-          <img
-            className="w-10 h-10 md:inline"
-            src={songInfo?.album?.images?.[0].url}
-          />
-        )}
-        <div>
-          <h3>{songInfo?.name}</h3>
-          <p>{songInfo?.artists?.[0].name}</p>
+    const playbackState = useQuery<{
+        currentPlayingTrack: SpotifyApi.CurrentPlaybackResponse;
+    }>(
+        ['playback', session?.user.accessToken],
+        ({ queryKey: [_, accessToken] }) => {
+            return fetch(`/api/playback?accessToken=${accessToken}`).then(
+                (response) => response.json()
+            );
+        }
+    );
+
+    const currentPlayingTrack = playbackState.data?.currentPlayingTrack;
+    const songInfo = currentPlayingTrack?.item;
+
+    console.log('songInfo', songInfo);
+
+    return (
+        <div className="grid h-24 grid-cols-3 bg-[#181818] px-2 text-xs text-white md:px-8 md:text-base">
+            <div className="flex items-center space-x-4">
+                {!!songInfo &&
+                    isTrackObjectFull(songInfo) &&
+                    songInfo?.album?.images?.[0].url && (
+                        <>
+                            <img
+                                className="w-10 h-10 md:inline"
+                                src={songInfo?.album?.images?.[0].url}
+                            />
+                            <div>
+                                <h3>{songInfo?.name}</h3>
+                                <p>{songInfo?.artists?.[0].name}</p>
+                            </div>
+                        </>
+                    )}
+            </div>
+
+            <div className="flex items-center justify-evenly">
+                <BackwardIcon className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
+                {!!currentPlayingTrack && currentPlayingTrack.is_playing ? (
+                    <PauseIcon
+                        onClick={togglePlayPause}
+                        className="w-10 h-10 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
+                    />
+                ) : (
+                    <PlayIcon
+                        onClick={togglePlayPause}
+                        className="w-10 h-10 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
+                    />
+                )}
+                <ForwardIcon className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
+            </div>
+
+            <div className="flex items-center justify-end space-x-3 md:space-x-4">
+                <SpeakerXMarkIcon
+                    onClick={() => volume > 0 && changeVolume(volume - 10)}
+                    className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
+                />
+                <input
+                    className="w-14 md:w-28"
+                    type="range"
+                    value={volume}
+                    min={0}
+                    max={100}
+                    onChange={(e) => changeVolume(Number(e.target.value))}
+                />
+                <SpeakerWaveIcon
+                    onClick={() => volume < 100 && changeVolume(volume + 10)}
+                    className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
+                />
+            </div>
         </div>
-      </div>
-
-      <div className="flex items-center justify-evenly">
-        <BackwardIcon className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
-        {isPlaying ? (
-          <PauseIcon
-            onClick={togglePlayPause}
-            className="w-10 h-10 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
-          />
-        ) : (
-          <PlayIcon
-            onClick={togglePlayPause}
-            className="w-10 h-10 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
-          />
-        )}
-        <ForwardIcon className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
-      </div>
-
-      <div className="flex items-center justify-end space-x-3 md:space-x-4">
-        <SpeakerXMarkIcon
-          onClick={() => volume > 0 && changeVolume(volume - 10)}
-          className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
-        />
-        <input
-          className="w-14 md:w-28"
-          type="range"
-          value={volume}
-          min={0}
-          max={100}
-          onChange={(e) => changeVolume(Number(e.target.value))}
-        />
-        <SpeakerWaveIcon
-          onClick={() => volume < 100 && changeVolume(volume + 10)}
-          className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
-        />
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Player;

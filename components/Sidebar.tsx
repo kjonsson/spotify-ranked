@@ -83,13 +83,13 @@ const Sidebar = () => {
                     menuOpen ? 'translate-x-0' : '-translate-x-full'
                 } z-2 absolute inset-y-0 left-0 min-w-[250px] transform overflow-y-auto bg-black pt-10 text-gray-100 transition duration-200 ease-in-out md:relative md:flex  md:translate-x-0 md:flex-col md:justify-between md:pt-0`}
             >
-                <div className="flex flex-col space-y-6">
+                <div className="flex flex-col">
                     <nav data-dev-hint="main navigation">
                         <div className="h-screen overflow-y-scroll text-xs text-gray-500 pb-36">
-                            <div className="space-y-4">
+                            <div className="">
                                 <Link
                                     href="/search"
-                                    className="flex items-center py-2 pl-4 hover:bg-gray-800 active:bg-gray-700"
+                                    className="flex items-center py-3 pl-4 hover:text-white active:bg-gray-700"
                                     onClick={() => setMenuOpen(false)}
                                 >
                                     <MagnifyingGlassIcon className="w-5 h-5" />
@@ -97,7 +97,7 @@ const Sidebar = () => {
                                 </Link>
                                 <Link
                                     href="/library"
-                                    className="flex items-center py-2 pl-4 2 hover:bg-gray-800 active:bg-gray-700"
+                                    className="flex items-center py-3 pl-4 2 hover:text-white active:bg-gray-700"
                                     onClick={() => setMenuOpen(false)}
                                 >
                                     <BuildingLibraryIcon className="w-5 h-5" />
@@ -110,7 +110,7 @@ const Sidebar = () => {
                                         <Link
                                             key={playlist.id}
                                             href={`/playlists/${playlist.id}`}
-                                            className="flex items-center py-2 pl-4 2 hover:bg-gray-800 active:bg-gray-700"
+                                            className="flex items-center py-3 pl-4 2 hover:text-white active:bg-gray-700"
                                             onClick={() => setMenuOpen(false)}
                                         >
                                             <p>{playlist.name}</p>
