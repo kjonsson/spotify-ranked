@@ -14,9 +14,9 @@ function isTrackObjectFull(data: any): data is SpotifyApi.TrackObjectFull {
 }
 
 const Player = () => {
-    const { isPlaying, volume, changeVolume, togglePlayPause } = useSpotify();
+    const { volume, changeVolume, togglePlayPause } = useSpotify();
 
-    const { playbackState } = useSpotifyPlayback();
+    const { playbackState, play, pause, controlStatus } = useSpotifyPlayback();
 
     const currentPlayingTrack = playbackState?.currentPlayingTrack;
     const songInfo = currentPlayingTrack?.item;
@@ -45,15 +45,19 @@ const Player = () => {
             <div className="flex items-center justify-evenly">
                 <BackwardIcon className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
                 {!!currentPlayingTrack && currentPlayingTrack.is_playing ? (
-                    <PauseIcon
-                        onClick={togglePlayPause}
-                        className="w-10 h-10 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
-                    />
+                    <button
+                        onClick={() => pause()}
+                        disabled={controlStatus === 'loading'}
+                    >
+                        <PauseIcon className="w-10 h-10 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
+                    </button>
                 ) : (
-                    <PlayIcon
-                        onClick={togglePlayPause}
-                        className="w-10 h-10 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
-                    />
+                    <button
+                        onClick={() => play()}
+                        disabled={controlStatus === 'loading'}
+                    >
+                        <PlayIcon className="w-10 h-10 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
+                    </button>
                 )}
                 <ForwardIcon className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
             </div>

@@ -18,6 +18,12 @@ const ArtistsPage: NextPage = () => {
             return fetch(
                 `/api/artists/${artistId}?accessToken=${accessToken}`
             ).then((response) => response.json());
+        },
+        {
+            // refetchInterval: 5000,
+            refetchOnReconnect: false,
+            refetchOnMount: false,
+            refetchOnWindowFocus: false,
         }
     );
 
@@ -26,13 +32,13 @@ const ArtistsPage: NextPage = () => {
     }
 
     return (
-        <div className="h-screen flex-grow overflow-y-scroll">
+        <div className="flex-grow h-screen overflow-y-scroll">
             <section className="flex h-80 w-full items-end space-x-7 bg-gradient-to-b from-lime-800 to-[#121212] p-8 text-white">
                 <img
-                    className="h-44 w-44 shadow-2xl"
+                    className="shadow-2xl h-44 w-44"
                     src={artistQuery.data.artist?.images[0]?.url}
                 />
-                <div className=" select-none">
+                <div className="select-none ">
                     <p>ARTIST</p>
                     <h1 className="text-2xl md:text-3xl xl:text-5xl">
                         {artistQuery.data.artist?.name}

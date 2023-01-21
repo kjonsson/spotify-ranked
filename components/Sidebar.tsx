@@ -19,6 +19,12 @@ const Sidebar = () => {
             return fetch(`/api/playlists?accessToken=${accessToken}`).then(
                 (response) => response.json()
             );
+        },
+        {
+            // refetchInterval: 5000,
+            refetchOnReconnect: false,
+            refetchOnMount: false,
+            refetchOnWindowFocus: false,
         }
     );
 

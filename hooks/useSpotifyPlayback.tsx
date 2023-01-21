@@ -1,10 +1,12 @@
 import { useSession } from 'next-auth/react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export const useSpotifyPlayback = () => {
     const { data: session } = useSession();
 
-    const playbackState = useQuery<{
+    const queryClient = useQueryClient();
+
+    const playbackQuery = useQuery<{
         currentPlayingTrack: SpotifyApi.CurrentPlaybackResponse;
     }>(
         ['playback', session?.user.accessToken],
@@ -17,8 +19,44 @@ export const useSpotifyPlayback = () => {
             // refetchInterval: 5000,
             refetchOnReconnect: false,
             refetchOnMount: false,
+            refetchOnWindowFocus: false,
         }
     );
 
-    return { playbackState: playbackState.data };
+    const { mutate: controlMutate, status: controlStatus } = useMutation(
+        async ({
+            action,
+            accessToken,
+        }: {
+            action: string;
+            accessToken: string;
+        }) => {
+            const res = await fetch(
+                `/api/controls?accessToken=${accessToken}&action=${action}`
+            );
+            return await res.json();
+        },
+        {
+            onSuccess: () => queryClient.invalidateQueries(['playback']),
+        }
+    );
+
+    const play = async () => {
+        console.log('play start');
+        await controlMutate({
+            action: 'PLAY',
+            accessToken: session?.user.accessToken ?? '',
+        });
+        console.log('play done');
+    };
+    const pause = async () => {
+        console.log('pause start');
+        await controlMutate({
+            action: 'PAUSE',
+            accessToken: session?.user.accessToken ?? '',
+        });
+        console.log('pause done');
+    };
+
+    return { playbackState: playbackQuery.data, play, pause, controlStatus };
 };
