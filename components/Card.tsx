@@ -1,3 +1,10 @@
+import Image from 'next/legacy/image';
+import { useState } from 'react';
+
+function cn(...classes: string[]) {
+    return classes.filter(Boolean).join(' ');
+}
+
 const Card = ({
     image,
     title,
@@ -9,16 +16,23 @@ const Card = ({
     subtitle: string;
     onClick: () => void;
 }) => {
+    const [isLoading, setLoading] = useState(true);
+
     return (
-        <div
-            onClick={onClick}
-            className="m-3 flex max-w-[200px] cursor-pointer flex-col justify-between rounded-lg bg-[#181818] p-5 text-white shadow-md hover:bg-[#282828]"
-        >
-            <div className="flex items-center justify-center">
-                <img
-                    className="m-2 rounded-full aspect-square"
+        <div onClick={onClick} className="group hover:cursor-pointer">
+            <div className="w-full overflow-hidden aspect-w-1 aspect-h-1">
+                <Image
+                    className={cn(
+                        'duration-700 ease-in-out group-hover:opacity-50',
+                        isLoading
+                            ? 'scale-110 blur-2xl grayscale'
+                            : 'scale-100 blur-0 grayscale-0'
+                    )}
                     src={image}
                     alt=""
+                    layout="fill"
+                    objectFit="cover"
+                    onLoadingComplete={() => setLoading(false)}
                 />
             </div>
             <div className="select-none pt-7">

@@ -33,7 +33,7 @@ const Home: NextPage = () => {
     }
 
     return (
-        <div className="w-full h-screen pl-4 text-white">
+        <div className="w-full h-screen px-4 text-white">
             <div className="p-5">
                 <div className="relative z-1">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-1">
@@ -69,7 +69,7 @@ const Home: NextPage = () => {
                         <div className="pb-24 mb-24">
                             <div className="py-5 select-none">
                                 <h2>Recently Played Songs</h2>
-                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                                <div className="grid grid-cols-2 gap-y-10 gap-x-6 md:grid-cols-3 lg:grid-cols-5">
                                     {searchHistoryResponse.data.recentlyPlayedTracks.map(
                                         (track) => (
                                             <Card
@@ -95,7 +95,7 @@ const Home: NextPage = () => {
                     {!!searchResult?.tracks && (
                         <div className="py-5">
                             <h2>Songs</h2>
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                            <div className="grid grid-cols-2 gap-y-10 gap-x-6 md:grid-cols-3 lg:grid-cols-5">
                                 {searchResult.tracks.items.map((track) => (
                                     <Card
                                         image={track.album.images[0].url}
@@ -112,7 +112,7 @@ const Home: NextPage = () => {
                     {!!searchResult?.artists && (
                         <div className="py-5">
                             <h2>Artists</h2>
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                            <div className="grid grid-cols-2 gap-y-10 gap-x-6 md:grid-cols-3 lg:grid-cols-5">
                                 {searchResult.artists.items.map((artist) => (
                                     <Card
                                         image={artist?.images[0]?.url}

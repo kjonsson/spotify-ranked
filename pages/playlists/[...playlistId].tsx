@@ -3,6 +3,7 @@ import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import BlurImage from '../../components/BlurImage';
 import Songs from '../../components/Songs';
 
 const PlaylistPage: NextPage = () => {
@@ -50,10 +51,9 @@ const PlaylistPage: NextPage = () => {
             <section
                 className={`flex h-80 w-full items-end space-x-7 bg-gradient-to-b from-lime-800 to-[#121212] p-8 text-white`}
             >
-                <img
-                    className="shadow-2xl h-44 w-44"
-                    src={playlist?.images[0]?.url}
-                />
+                <div className="h-52 w-52">
+                    <BlurImage imageSrc={playlist?.images[0]?.url} />
+                </div>
                 <div className="select-none ">
                     <p>PLAYLIST</p>
                     <h1 className="text-2xl md:text-3xl xl:text-5xl">

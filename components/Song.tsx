@@ -1,5 +1,6 @@
 import { useSpotify } from '../hooks/useSpotify';
 import { millisecondsToMinutesAndSeconds } from '../utils/time';
+import BlurImage from './BlurImage';
 
 const Song = ({
     order,
@@ -21,9 +22,11 @@ const Song = ({
         >
             <div className="flex items-center space-x-4">
                 <p>{order + 1}</p>
-                <img className="h-10 w-10" src={track.album?.images[0]?.url} />
+                <div className="w-10 h-10">
+                    <BlurImage imageSrc={track.album?.images[0]?.url} />
+                </div>
                 <div>
-                    <p className="w-36 truncate text-white lg:w-64">
+                    <p className="text-white truncate w-36 lg:w-64">
                         {track?.name}
                     </p>
                     <p className="w-40 truncate">{subtitle}</p>

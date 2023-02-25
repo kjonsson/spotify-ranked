@@ -37,7 +37,7 @@ const Home: NextPage = () => {
                     {!!libraryQuery?.data?.albums && (
                         <div className="py-5 select-none">
                             <h2>Albums</h2>
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                            <div className="grid grid-cols-2 gap-y-10 gap-x-6 md:grid-cols-3 lg:grid-cols-5">
                                 {libraryQuery.data.albums.map((album) => (
                                     <Card
                                         image={album?.images[0]?.url}
