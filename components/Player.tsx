@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { useSpotifyPlayback } from '../hooks/useSpotifyPlayback';
 import { useSpotify } from '../hooks/useSpotify';
+import BlurImage from './BlurImage';
 
 function isTrackObjectFull(data: any): data is SpotifyApi.TrackObjectFull {
     return (data as SpotifyApi.TrackObjectFull).album !== undefined;
@@ -30,10 +31,11 @@ const Player = () => {
                     isTrackObjectFull(songInfo) &&
                     songInfo?.album?.images?.[0].url && (
                         <>
-                            <img
-                                className="w-10 h-10 md:inline"
-                                src={songInfo?.album?.images?.[0].url}
-                            />
+                            <div className="w-10 h-10">
+                                <BlurImage
+                                    imageSrc={songInfo?.album?.images?.[0].url}
+                                />
+                            </div>
                             <div>
                                 <h3>{songInfo?.name}</h3>
                                 <p>{songInfo?.artists?.[0].name}</p>
