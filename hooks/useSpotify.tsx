@@ -25,21 +25,15 @@ const useSpotifyApi = () => {
 type SpotifyContextType = {
     isPlaying: boolean;
     volume: number;
-    searchString: string;
-    searchResult: null | SpotifyApi.SearchResponse;
     changeVolume: (volume: number) => void;
     playSong: (track: SpotifyApi.TrackObjectFull | null) => void;
-    search: (searchString: string) => void;
 };
 
 const context = createContext<SpotifyContextType>({
     isPlaying: false,
     volume: 50,
-    searchString: '',
-    searchResult: null,
     changeVolume: () => {},
     playSong: () => {},
-    search: () => {},
 });
 
 export default context;
@@ -47,9 +41,6 @@ export default context;
 export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState<number>(50);
-    const [searchString, setSearchString] = useState<string>('');
-    const [searchResult, setSearchResult] =
-        useState<null | SpotifyApi.SearchResponse>({});
 
     const spotifyApi = useSpotifyApi();
 
@@ -93,31 +84,13 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
         []
     );
 
-    const search = (searchString: string) => {
-        if (searchString) {
-            spotifyApi
-                .search(searchString, ['album', 'artist', 'track'], {
-                    limit: 10,
-                })
-                .then((data) => {
-                    setSearchResult(data.body);
-                });
-        } else {
-            setSearchResult({});
-        }
-        setSearchString(searchString);
-    };
-
     return (
         <context.Provider
             value={{
                 isPlaying,
                 volume,
-                searchString,
-                searchResult,
                 changeVolume,
                 playSong,
-                search,
             }}
         >
             {children}
