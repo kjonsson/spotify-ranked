@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import BlurImage from '../../components/BlurImage';
+import { LoadingPage, LoadingSpinner } from '../../components/Loading';
 import Songs from '../../components/Songs';
 
 const PlaylistPage: NextPage = () => {
@@ -32,8 +33,8 @@ const PlaylistPage: NextPage = () => {
         }
     );
 
-    if (!playlistQuery.data) {
-        return <div>Loading ...</div>;
+    if (true || !playlistQuery.data) {
+        return <LoadingPage />;
     }
 
     const playlist = playlistQuery.data.playlist;
@@ -47,7 +48,7 @@ const PlaylistPage: NextPage = () => {
         .filter((item) => !!item) as SpotifyApi.TrackObjectFull[];
 
     return (
-        <div className="flex-grow h-screen overflow-y-scroll">
+        <div className="h-screen flex-grow overflow-y-scroll">
             <section
                 className={`flex h-80 w-full items-end space-x-7 bg-gradient-to-b from-lime-800 to-[#121212] p-8 text-white`}
             >
