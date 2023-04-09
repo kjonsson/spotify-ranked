@@ -9,13 +9,16 @@ const Header = () => {
         <header className="relative z-30 flex items-end justify-end pt-5 pr-5 lg:absolute lg:top-0 lg:right-0">
             <div
                 onClick={() => signOut({ callbackUrl: '/login' })}
-                className="flex items-center p-1 pr-2 space-x-3 text-white bg-black rounded-full cursor-pointer opacity-90 hover:opacity-80"
+                className="flex cursor-pointer items-center space-x-3 rounded-full bg-black p-1 pr-2 text-white opacity-90 hover:opacity-80"
             >
-                <div className="w-10 h-10">
-                    <BlurImage imageSrc={session?.user?.image ?? ''} />
+                <div className="h-10 w-10">
+                    <BlurImage
+                        rounded="full"
+                        imageSrc={session?.user?.image ?? ''}
+                    />
                 </div>
                 <h2>{session?.user.name}</h2>
-                <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                <ArrowRightOnRectangleIcon className="h-5 w-5" />
             </div>
         </header>
     );

@@ -6,7 +6,8 @@
 - tailwind
 - nextjs/next-auth
 - typescript
-- deployed on vercel: <URL>
+- react query
+- deployed on vercel: kris-spotify.vercel.app
 
 # Tech used
 

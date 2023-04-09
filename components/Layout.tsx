@@ -1,5 +1,4 @@
 import Sidebar from './Sidebar';
-import Player from './Player';
 import Header from './Header';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -17,15 +16,11 @@ export default function Layout({ children }: { children: JSX.Element }) {
             <div className="h-screen overflow-hidden bg-black">
                 <main className="flex h-screen">
                     {hasSidebar && <Sidebar></Sidebar>}
-                    <div className="w-full bg-black">
+                    <div className="w-full bg-zinc-900">
                         {hasSession && <Header />}
                         {children}
                     </div>
                 </main>
-
-                <div className="sticky bottom-0 z-50">
-                    {hasSession && <Player />}
-                </div>
             </div>
         </>
     );

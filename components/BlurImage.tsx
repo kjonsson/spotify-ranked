@@ -8,9 +8,11 @@ function cn(...classes: string[]) {
 const BlurImage = ({
     imageSrc,
     durationType = 'long',
+    rounded = null,
 }: {
     imageSrc: string;
     durationType?: 'short' | 'long';
+    rounded?: 'full';
 }) => {
     const [isLoading, setLoading] = useState(true);
 
@@ -19,11 +21,14 @@ const BlurImage = ({
         durationString = 'duration-300';
     }
 
+    const roundedString = rounded === 'full' ? 'rounded-full' : '';
+
     return (
         <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden">
             <Image
                 className={cn(
                     `${durationString} ease-in-out group-hover:opacity-50`,
+                    roundedString,
                     isLoading
                         ? 'scale-110 blur-2xl grayscale'
                         : 'scale-100 blur-0 grayscale-0'
