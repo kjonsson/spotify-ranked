@@ -1,21 +1,32 @@
 import { debounce } from 'lodash';
-import { useSession } from 'next-auth/react';
-import {
-    createContext,
-    useCallback,
-    useContext,
-    useEffect,
-    useState,
-} from 'react';
-import useSpotifyApi from './useSpotifyApi';
+import { createContext, useCallback, useContext, useState } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { useEffect } from 'react';
+import spotifyApi from '../lib/spotify';
+
+const useSpotifyApi = () => {
+    const { data: session, status } = useSession();
+
+    useEffect(() => {
+        if (!session) {
+            return;
+        }
+
+        if (session.error === 'RefreshAccessTokenError') {
+            signIn();
+        }
+
+        spotifyApi.setAccessToken(session.user.accessToken);
+    }, [session]);
+
+    return spotifyApi;
+};
 
 type SpotifyContextType = {
     isPlaying: boolean;
     volume: number;
-    currentTrackId: null | string;
     searchString: string;
     searchResult: null | SpotifyApi.SearchResponse;
-    togglePlayPause: () => void;
     changeVolume: (volume: number) => void;
     playSong: (track: SpotifyApi.TrackObjectFull | null) => void;
     search: (searchString: string) => void;
@@ -24,10 +35,8 @@ type SpotifyContextType = {
 const context = createContext<SpotifyContextType>({
     isPlaying: false,
     volume: 50,
-    currentTrackId: null,
     searchString: '',
     searchResult: null,
-    togglePlayPause: () => {},
     changeVolume: () => {},
     playSong: () => {},
     search: () => {},
@@ -37,25 +46,12 @@ export default context;
 
 export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [currentTrackId, setCurrentTrackId] = useState<null | string>(null);
     const [volume, setVolume] = useState<number>(50);
     const [searchString, setSearchString] = useState<string>('');
     const [searchResult, setSearchResult] =
         useState<null | SpotifyApi.SearchResponse>({});
 
     const spotifyApi = useSpotifyApi();
-
-    const togglePlayPause = () => {
-        spotifyApi.getMyCurrentPlaybackState().then((data) => {
-            if (data.body?.is_playing) {
-                spotifyApi.pause();
-                setIsPlaying(false);
-            } else {
-                spotifyApi.play();
-                setIsPlaying(true);
-            }
-        });
-    };
 
     const playSong = (track: SpotifyApi.TrackObjectFull | null) => {
         if (!track) {
@@ -76,7 +72,6 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
                 uris: [track?.uri],
             })
             .then(() => {
-                setCurrentTrackId(track.id);
                 setIsPlaying(true);
             })
             .catch((e) => {
@@ -118,10 +113,8 @@ export const SpotifyProvider = ({ children }: { children: JSX.Element }) => {
             value={{
                 isPlaying,
                 volume,
-                currentTrackId,
                 searchString,
                 searchResult,
-                togglePlayPause,
                 changeVolume,
                 playSong,
                 search,

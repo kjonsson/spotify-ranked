@@ -9,14 +9,6 @@ type SpotifyArtist = {
     name: string;
 };
 
-type SpotifyTrackType = {
-    album: {
-        images?: SpotifyImageType[];
-    };
-    name?: string;
-    artists?: SpotifyArtist[];
-};
-
 async function handler(req: NextApiRequest, res: NextApiResponse) {
     let {
         query: { accessToken, action },

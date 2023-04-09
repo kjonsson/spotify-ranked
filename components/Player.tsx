@@ -15,7 +15,7 @@ function isTrackObjectFull(data: any): data is SpotifyApi.TrackObjectFull {
 }
 
 const Player = () => {
-    const { volume, changeVolume, togglePlayPause } = useSpotify();
+    const { volume, changeVolume } = useSpotify();
 
     const { playbackState, play, pause, controlStatus } = useSpotifyPlayback();
 
@@ -31,7 +31,7 @@ const Player = () => {
                     isTrackObjectFull(songInfo) &&
                     songInfo?.album?.images?.[0].url && (
                         <>
-                            <div className="w-10 h-10">
+                            <div className="h-10 w-10">
                                 <BlurImage
                                     imageSrc={songInfo?.album?.images?.[0].url}
                                 />
@@ -45,29 +45,29 @@ const Player = () => {
             </div>
 
             <div className="flex items-center justify-evenly">
-                <BackwardIcon className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
+                <BackwardIcon className="h-5 w-5 transform cursor-pointer transition duration-100 ease-out hover:scale-125" />
                 {!!currentPlayingTrack && currentPlayingTrack.is_playing ? (
                     <button
                         onClick={() => pause()}
                         disabled={controlStatus === 'loading'}
                     >
-                        <PauseIcon className="w-10 h-10 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
+                        <PauseIcon className="h-10 w-10 transform cursor-pointer transition duration-100 ease-out hover:scale-125" />
                     </button>
                 ) : (
                     <button
                         onClick={() => play()}
                         disabled={controlStatus === 'loading'}
                     >
-                        <PlayIcon className="w-10 h-10 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
+                        <PlayIcon className="h-10 w-10 transform cursor-pointer transition duration-100 ease-out hover:scale-125" />
                     </button>
                 )}
-                <ForwardIcon className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125" />
+                <ForwardIcon className="h-5 w-5 transform cursor-pointer transition duration-100 ease-out hover:scale-125" />
             </div>
 
             <div className="flex items-center justify-end space-x-3 md:space-x-4">
                 <SpeakerXMarkIcon
                     onClick={() => volume > 0 && changeVolume(volume - 10)}
-                    className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
+                    className="h-5 w-5 transform cursor-pointer transition duration-100 ease-out hover:scale-125"
                 />
                 <input
                     className="w-14 md:w-28"
@@ -79,7 +79,7 @@ const Player = () => {
                 />
                 <SpeakerWaveIcon
                     onClick={() => volume < 100 && changeVolume(volume + 10)}
-                    className="w-5 h-5 transition duration-100 ease-out transform cursor-pointer hover:scale-125"
+                    className="h-5 w-5 transform cursor-pointer transition duration-100 ease-out hover:scale-125"
                 />
             </div>
         </div>

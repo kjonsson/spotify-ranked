@@ -42,20 +42,17 @@ export const useSpotifyPlayback = () => {
     );
 
     const play = async () => {
-        console.log('play start');
         await controlMutate({
             action: 'PLAY',
             accessToken: session?.user.accessToken ?? '',
         });
-        console.log('play done');
     };
+
     const pause = async () => {
-        console.log('pause start');
         await controlMutate({
             action: 'PAUSE',
             accessToken: session?.user.accessToken ?? '',
         });
-        console.log('pause done');
     };
 
     return { playbackState: playbackQuery.data, play, pause, controlStatus };

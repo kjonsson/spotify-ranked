@@ -20,9 +20,12 @@ const Login = ({
     }
 
     return (
-        <div className="flex flex-col items-center justify-center w-full h-screen bg-black">
-            <div className="pb-4 w-52">
-                <BlurImage imageSrc="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/2048px-Spotify_logo_without_text.svg.png" />
+        <div className="flex h-screen w-full flex-col items-center justify-center bg-black">
+            <div className="w-52 pb-4">
+                <BlurImage
+                    durationType="short"
+                    imageSrc="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/2048px-Spotify_logo_without_text.svg.png"
+                />
             </div>
             {Object.values(providers).map((provider) => (
                 <div key={provider.name}>
