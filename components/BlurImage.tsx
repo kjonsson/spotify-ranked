@@ -8,7 +8,7 @@ function cn(...classes: string[]) {
 const BlurImage = ({
     imageSrc,
     durationType = 'long',
-    rounded = null,
+    rounded = undefined,
 }: {
     imageSrc: string;
     durationType?: 'short' | 'long';
