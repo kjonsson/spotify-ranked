@@ -3,6 +3,7 @@ import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import BlurImage from '../../components/BlurImage';
+import { LoadingPage } from '../../components/Loading';
 import Song from '../../components/Song';
 
 const ArtistsPage: NextPage = () => {
@@ -29,11 +30,11 @@ const ArtistsPage: NextPage = () => {
     );
 
     if (!artistQuery.data) {
-        return <div>Loading ...</div>;
+        return <LoadingPage />;
     }
 
     return (
-        <div className="flex-grow h-screen overflow-y-scroll">
+        <div className="h-screen flex-grow overflow-y-scroll">
             <section className="flex h-80 w-full items-end space-x-7 bg-gradient-to-b from-lime-800 to-[#121212] p-8 text-white">
                 <div className="h-52 w-52">
                     <BlurImage

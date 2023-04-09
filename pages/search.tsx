@@ -4,14 +4,30 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Card from '../components/Card';
-import { useSpotify } from '../hooks/useSpotify';
+import { LoadingPage } from '../components/Loading';
 
 const Home: NextPage = () => {
-    const { playSong } = useSpotify();
     const router = useRouter();
-    const [searchString, setSearchString] = useState<string>('');
+    const [searchString, setSearchString] = useState<string | undefined>(
+        undefined
+    );
 
     const { data: session } = useSession();
+
+    const playMutation = useMutation(
+        async ({
+            accessToken,
+            trackUri,
+        }: {
+            accessToken: string;
+            trackUri: string;
+        }) => {
+            const res = await fetch(
+                `/api/playback/play?accessToken=${accessToken}&trackUri=${trackUri}`
+            );
+            return await res.json();
+        }
+    );
 
     const searchHistoryResponse = useQuery<{
         recentlyPlayedTracks: SpotifyApi.PlayHistoryObject[];
@@ -30,7 +46,6 @@ const Home: NextPage = () => {
         }
     );
 
-    const queryClient = useQueryClient();
     const searchMutation = useMutation<
         null | SpotifyApi.SearchResponse,
         Error,
@@ -54,7 +69,7 @@ const Home: NextPage = () => {
     );
 
     if (!searchHistoryResponse.data) {
-        return <div>Loading ...</div>;
+        return <LoadingPage />;
     }
 
     return (
@@ -95,31 +110,40 @@ const Home: NextPage = () => {
                 </div>
             </div>
             <div className="h-screen overflow-y-scroll">
-                {!!searchHistoryResponse?.data?.recentlyPlayedTracks && (
-                    <div className="mb-24 pb-24">
-                        <div className="select-none py-5">
-                            <h2>Recently Played Songs</h2>
-                            <div className="grid grid-cols-2 gap-y-10 gap-x-6 md:grid-cols-3 lg:grid-cols-5">
-                                {searchHistoryResponse.data.recentlyPlayedTracks.map(
-                                    (track) => (
-                                        <Card
-                                            image={
-                                                track.track.album.images[0].url
-                                            }
-                                            title={track.track.name}
-                                            subtitle={
-                                                track.track.artists[0].name
-                                            }
-                                            onClick={() => {
-                                                playSong(track.track);
-                                            }}
-                                        />
-                                    )
-                                )}
+                {!searchString &&
+                    !!searchHistoryResponse?.data?.recentlyPlayedTracks && (
+                        <div className="mb-24 pb-24">
+                            <div className="select-none py-5">
+                                <h2>Recently Played Songs</h2>
+                                <div className="grid grid-cols-2 gap-y-10 gap-x-6 md:grid-cols-3 lg:grid-cols-5">
+                                    {searchHistoryResponse.data.recentlyPlayedTracks.map(
+                                        (track) => (
+                                            <Card
+                                                image={
+                                                    track.track.album.images[0]
+                                                        .url
+                                                }
+                                                title={track.track.name}
+                                                subtitle={
+                                                    track.track.artists[0].name
+                                                }
+                                                onClick={() => {
+                                                    playMutation.mutate({
+                                                        trackUri:
+                                                            track.track.uri,
+                                                        accessToken:
+                                                            session?.user
+                                                                .accessToken ??
+                                                            '',
+                                                    });
+                                                }}
+                                            />
+                                        )
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
                 <div className="mb-24 pb-24">
                     {!!searchMutation.data?.tracks && (
                         <div className="py-5">
@@ -132,7 +156,12 @@ const Home: NextPage = () => {
                                             title={track.name}
                                             subtitle={track.artists[0].name}
                                             onClick={() => {
-                                                playSong(track);
+                                                playMutation.mutate({
+                                                    trackUri: track.uri,
+                                                    accessToken:
+                                                        session?.user
+                                                            .accessToken ?? '',
+                                                });
                                             }}
                                         />
                                     )

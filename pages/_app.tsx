@@ -1,24 +1,21 @@
-import "../styles/globals.css";
-import type { AppProps } from "next/app";
-import { SessionProvider } from "next-auth/react";
-import { SpotifyProvider } from "../hooks/useSpotify";
-import Layout from "../components/Layout";
-import { QueryClient, QueryClientProvider } from "react-query";
+import '../styles/globals.css';
+import type { AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
+import Layout from '../components/Layout';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  const client = new QueryClient();
+    const client = new QueryClient();
 
-  return (
-    <SessionProvider session={session}>
-      <QueryClientProvider client={client}>
-        <SpotifyProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </SpotifyProvider>
-      </QueryClientProvider>
-    </SessionProvider>
-  );
+    return (
+        <SessionProvider session={session}>
+            <QueryClientProvider client={client}>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
+            </QueryClientProvider>
+        </SessionProvider>
+    );
 }
 
 export default MyApp;

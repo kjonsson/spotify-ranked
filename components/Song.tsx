@@ -1,4 +1,5 @@
-import { useSpotify } from '../hooks/useSpotify';
+import { useSession } from 'next-auth/react';
+import { useMutation } from 'react-query';
 import { millisecondsToMinutesAndSeconds } from '../utils/time';
 import BlurImage from './BlurImage';
 
@@ -13,20 +14,40 @@ const Song = ({
     album?: SpotifyApi.AlbumObjectSimplified;
     subtitle: string;
 }) => {
-    const { playSong } = useSpotify();
+    const { data: session } = useSession();
+
+    const playMutation = useMutation(
+        async ({
+            accessToken,
+            trackUri,
+        }: {
+            accessToken: string;
+            trackUri: string;
+        }) => {
+            const res = await fetch(
+                `/api/playback/play?accessToken=${accessToken}&trackUri=${trackUri}`
+            );
+            return await res.json();
+        }
+    );
 
     return (
         <div
-            onDoubleClick={() => playSong(track)}
+            onDoubleClick={() =>
+                playMutation.mutate({
+                    trackUri: track.uri,
+                    accessToken: session?.user.accessToken ?? '',
+                })
+            }
             className="flex  select-none justify-between rounded-lg px-5 py-4 text-gray-500 hover:bg-[#282828]"
         >
             <div className="flex items-center space-x-4">
                 <p>{order + 1}</p>
-                <div className="w-10 h-10">
+                <div className="h-10 w-10">
                     <BlurImage imageSrc={track.album?.images[0]?.url} />
                 </div>
                 <div>
-                    <p className="text-white truncate w-36 lg:w-64">
+                    <p className="w-36 truncate text-white lg:w-64">
                         {track?.name}
                     </p>
                     <p className="w-40 truncate">{subtitle}</p>

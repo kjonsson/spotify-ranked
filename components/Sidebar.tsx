@@ -29,12 +29,12 @@ const Sidebar = () => {
     );
 
     if (!playlistsQuery.data?.playlists) {
-        return <div>Loading ...</div>;
+        return null;
     }
 
     return (
         <div
-            className="relative z-50 w-0 min-h-0 md:flex md:min-h-screen md:w-auto"
+            className="relative z-50 min-h-0 w-0 md:flex md:min-h-screen md:w-auto"
             data-dev-hint="container"
         >
             <header
@@ -45,12 +45,12 @@ const Sidebar = () => {
                 <label
                     htmlFor="menu-open"
                     id="mobile-menu-button"
-                    className="p-2 m-2 rounded-md hover:cursor-pointer hover:bg-gray-700 hover:text-white focus:outline-none"
+                    className="m-2 rounded-md p-2 hover:cursor-pointer hover:bg-gray-700 hover:text-white focus:outline-none"
                 >
                     {menuOpen ? (
                         <svg
                             id="menu-close-icon"
-                            className="w-6 h-6 transition duration-200 ease-in-out"
+                            className="h-6 w-6 transition duration-200 ease-in-out"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -66,7 +66,7 @@ const Sidebar = () => {
                     ) : (
                         <svg
                             id="menu-open-icon"
-                            className="w-6 h-6 transition duration-200 ease-in-out"
+                            className="h-6 w-6 transition duration-200 ease-in-out"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -91,22 +91,22 @@ const Sidebar = () => {
             >
                 <div className="flex flex-col">
                     <nav data-dev-hint="main navigation">
-                        <div className="h-screen overflow-y-scroll text-xs text-gray-500 pb-36">
+                        <div className="h-screen overflow-y-scroll pb-36 text-xs text-gray-500">
                             <div className="">
                                 <Link
                                     href="/search"
                                     className="flex items-center py-3 pl-4 hover:text-white active:bg-gray-700"
                                     onClick={() => setMenuOpen(false)}
                                 >
-                                    <MagnifyingGlassIcon className="w-5 h-5" />
+                                    <MagnifyingGlassIcon className="h-5 w-5" />
                                     <p className="pl-2">Search</p>
                                 </Link>
                                 <Link
                                     href="/library"
-                                    className="flex items-center py-3 pl-4 2 hover:text-white active:bg-gray-700"
+                                    className="2 flex items-center py-3 pl-4 hover:text-white active:bg-gray-700"
                                     onClick={() => setMenuOpen(false)}
                                 >
-                                    <BuildingLibraryIcon className="w-5 h-5" />
+                                    <BuildingLibraryIcon className="h-5 w-5" />
                                     <p className="pl-2">Your Library</p>
                                 </Link>
                                 <hr className="border-t-[0.1px] border-gray-900" />
@@ -116,7 +116,7 @@ const Sidebar = () => {
                                         <Link
                                             key={playlist.id}
                                             href={`/playlists/${playlist.id}`}
-                                            className="flex items-center py-3 pl-4 2 hover:text-white active:bg-gray-700"
+                                            className="2 flex items-center py-3 pl-4 hover:text-white active:bg-gray-700"
                                             onClick={() => setMenuOpen(false)}
                                         >
                                             <p>{playlist.name}</p>

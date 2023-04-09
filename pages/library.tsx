@@ -3,6 +3,7 @@ import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import Card from '../components/Card';
+import { LoadingPage } from '../components/Loading';
 
 const Home: NextPage = () => {
     const router = useRouter();
@@ -27,7 +28,7 @@ const Home: NextPage = () => {
     );
 
     if (!libraryQuery.data) {
-        return null;
+        return <LoadingPage />;
     }
 
     return (

@@ -33,7 +33,7 @@ const PlaylistPage: NextPage = () => {
         }
     );
 
-    if (true || !playlistQuery.data) {
+    if (!playlistQuery.data) {
         return <LoadingPage />;
     }
 
