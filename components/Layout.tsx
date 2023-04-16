@@ -15,11 +15,7 @@ export default function Layout({ children }: { children: JSX.Element }) {
         <>
             <div className="h-screen overflow-hidden bg-black">
                 <main className="flex h-screen">
-                    {hasSidebar && (
-                        <div className="w-[250px]">
-                            <Sidebar></Sidebar>
-                        </div>
-                    )}
+                    {hasSidebar && <Sidebar></Sidebar>}
                     <div className="relative w-full bg-zinc-900">
                         {hasSession && <Header />}
                         {children}

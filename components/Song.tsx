@@ -54,10 +54,9 @@ const Song = ({
                 </div>
             </div>
 
-            <div className="flex w-[500px] items-center justify-between">
-                <p className="w-40">{track?.popularity}</p>
-                <p className="w-40">{album?.name ?? null}</p>
-                <p className="pr-10">
+            <div className="flex items-center justify-between">
+                <p className="hidden w-40 lg:block">{album?.name ?? null}</p>
+                <p className="">
                     {millisecondsToMinutesAndSeconds(track?.duration_ms || 0)}
                 </p>
             </div>
