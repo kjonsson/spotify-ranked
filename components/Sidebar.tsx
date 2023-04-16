@@ -34,7 +34,7 @@ const Sidebar = () => {
 
     return (
         <div
-            className="relative z-50 min-h-0 w-0 md:flex md:min-h-screen md:w-auto"
+            className="relative z-50 h-full min-h-0 w-0 md:flex md:min-h-screen md:w-auto"
             data-dev-hint="container"
         >
             <header

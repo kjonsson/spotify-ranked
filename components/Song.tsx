@@ -41,21 +41,21 @@ const Song = ({
             }
             className="flex  select-none justify-between rounded-lg px-5 py-4 text-gray-500 hover:bg-[#282828]"
         >
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-1 items-center space-x-4">
                 <p>{order + 1}</p>
                 <div className="h-10 w-10">
                     <BlurImage imageSrc={track.album?.images[0]?.url} />
                 </div>
-                <div>
-                    <p className="w-36 truncate text-white lg:w-64">
-                        {track?.name}
-                    </p>
-                    <p className="w-40 truncate">{subtitle}</p>
+                <div className="w-48 lg:w-64">
+                    <p className="truncate text-white">{track?.name}</p>
+                    <p className="truncate">{subtitle}</p>
                 </div>
             </div>
 
-            <div className="flex items-center justify-between">
-                <p className="hidden w-40 lg:block">{album?.name ?? null}</p>
+            <div className="flex flex-1 items-center justify-between">
+                <p className="hidden truncate line-clamp-1 lg:block">
+                    {album?.name ?? null}
+                </p>
                 <p className="">
                     {millisecondsToMinutesAndSeconds(track?.duration_ms || 0)}
                 </p>
