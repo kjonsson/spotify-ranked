@@ -23,7 +23,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
         return res.status(200).json({
             albums: searchResponse.body.albums,
-            artists: searchResponse.body.albums,
+            artists: searchResponse.body.artists,
             tracks: searchResponse.body.tracks,
         });
     } catch (error) {
