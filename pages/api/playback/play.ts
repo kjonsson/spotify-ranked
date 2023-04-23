@@ -17,9 +17,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(500).json({ error: 'No trackUri' });
     }
 
-    spotifyApi.play({
-        uris: [trackUri],
-    });
+    try {
+        await spotifyApi.play({
+            uris: [trackUri],
+        });
+    } catch (e) {
+        return res.status(500).json({ error: 'Error playing track' });
+    }
 
     res.status(200).json({});
 }

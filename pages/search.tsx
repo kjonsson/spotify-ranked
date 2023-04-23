@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Card from '../components/Card';
 import { LoadingPage } from '../components/Loading';
+import toast from 'react-hot-toast';
 
 const Home: NextPage = () => {
     const router = useRouter();
@@ -14,8 +15,8 @@ const Home: NextPage = () => {
 
     const { data: session } = useSession();
 
-    const playMutation = useMutation(
-        async ({
+    const playMutation = useMutation({
+        mutationFn: async ({
             accessToken,
             trackUri,
         }: {
@@ -25,9 +26,17 @@ const Home: NextPage = () => {
             const res = await fetch(
                 `/api/playback/play?accessToken=${accessToken}&trackUri=${trackUri}`
             );
-            return await res.json();
-        }
-    );
+
+            if (res.ok) {
+                return res.json();
+            }
+
+            throw new Error('Failed to play track');
+        },
+        onError: (error: Error) => {
+            toast.error(error.message);
+        },
+    });
 
     const searchHistoryResponse = useQuery<{
         recentlyPlayedTracks: SpotifyApi.PlayHistoryObject[];
@@ -73,12 +82,12 @@ const Home: NextPage = () => {
     }
 
     return (
-        <div className="w-full h-screen px-4 text-white">
+        <div className="h-screen w-full px-4 text-white">
             <div className="p-5">
-                <div className="relative z-1">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-1">
+                <div className="z-1 relative">
+                    <div className="z-1 pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <svg
-                            className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                            className="h-5 w-5 text-gray-500 dark:text-gray-400"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -95,7 +104,7 @@ const Home: NextPage = () => {
                     <input
                         type="search"
                         id="default-search"
-                        className="w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 border-none rounded-full bg-gray-50 placeholder:text-gray-500 focus:outline-none focus:ring-0 sm:w-96"
+                        className="w-full rounded-full border border-none border-gray-300 bg-gray-50 p-3 pl-10 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-0 sm:w-96"
                         placeholder="Artist or song"
                         required
                         value={searchString}
@@ -112,8 +121,8 @@ const Home: NextPage = () => {
             <div className="h-screen overflow-y-scroll">
                 {!searchString &&
                     !!searchHistoryResponse?.data?.recentlyPlayedTracks && (
-                        <div className="pb-24 mb-24">
-                            <div className="py-5 select-none">
+                        <div className="mb-24 pb-24">
+                            <div className="select-none py-5">
                                 <h2>Recently Played Songs</h2>
                                 <div className="grid grid-cols-2 gap-y-10 gap-x-6 md:grid-cols-3 lg:grid-cols-5">
                                     {searchHistoryResponse.data.recentlyPlayedTracks.map(
@@ -149,7 +158,7 @@ const Home: NextPage = () => {
                             </div>
                         </div>
                     )}
-                <div className="pb-24 mb-24">
+                <div className="mb-24 pb-24">
                     {!!searchMutation.data?.tracks && (
                         <div className="py-5">
                             <h2>Songs</h2>

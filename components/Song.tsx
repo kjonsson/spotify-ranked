@@ -2,6 +2,7 @@ import { useSession } from 'next-auth/react';
 import { useMutation } from 'react-query';
 import { millisecondsToMinutesAndSeconds } from '../utils/time';
 import BlurImage from './BlurImage';
+import toast from 'react-hot-toast';
 
 const Song = ({
     order,
@@ -16,8 +17,8 @@ const Song = ({
 }) => {
     const { data: session } = useSession();
 
-    const playMutation = useMutation(
-        async ({
+    const playMutation = useMutation({
+        mutationFn: async ({
             accessToken,
             trackUri,
         }: {
@@ -27,9 +28,16 @@ const Song = ({
             const res = await fetch(
                 `/api/playback/play?accessToken=${accessToken}&trackUri=${trackUri}`
             );
-            return await res.json();
-        }
-    );
+            if (res.ok) {
+                return res.json();
+            }
+
+            throw new Error('Failed to play track');
+        },
+        onError: (error: Error) => {
+            toast.error(error.message);
+        },
+    });
 
     return (
         <div
